@@ -13,7 +13,7 @@ const showDialog = ref(false);  // 다이얼로그 상태
     <v-app-bar color="primary" prominent>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"><v-icon>mdi-menu-open</v-icon></v-app-bar-nav-icon>
 
-        <v-toolbar-title>RealTime Model Board</v-toolbar-title>
+        <v-toolbar-title>RealTime Model DashBoard</v-toolbar-title>
 
         <v-spacer></v-spacer>
 
@@ -23,6 +23,7 @@ const showDialog = ref(false);  // 다이얼로그 상태
             <v-btn icon="mdi-filter" variant="text"></v-btn>
         </template>
         <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
+
     </v-app-bar>
 
     <!-- 모바일에서만 네비게이션 드로어 하단으로 이동 -->
