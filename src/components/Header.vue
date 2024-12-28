@@ -19,8 +19,8 @@ const changeContent = (value) => {
 <template>
     <!-- Tabs -->
     <v-tabs v-model="tab" align-tabs="center" color="primary" @update:modelValue="changeContent">
-        <v-tab value="home">Home</v-tab>
-        <v-tab value="reports">Reports</v-tab>
-        <v-tab value="settings">Settings</v-tab>
+        <v-tab value="A1">A1</v-tab>
+        <v-tab value="T1">T1</v-tab>
+        <v-tab value="E1">E1</v-tab>
     </v-tabs>
 </template>

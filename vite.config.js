@@ -12,6 +12,12 @@ export default defineConfig({
     vueJsx(),
     vueDevTools(),
   ],
+  build:{
+    sourcemap : true // source map active
+  },
+  define: {
+    __VUE_PROD_DEVTOOLS__: true  // 개발 환경에서 DevTools 활성화
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

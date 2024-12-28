@@ -7,6 +7,19 @@ const { mobile, mdAndUp } = useDisplay();
 
 const drawer = ref(false);
 const showDialog = ref(false);  // 다이얼로그 상태
+
+
+import { useAuthStore } from '@/stores/authStore';
+import { useRouter } from 'vue-router';
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+const handleLogout = () => {
+    authStore.logout();
+    router.push('/login');
+};
+
 </script>
 
 <template>
@@ -22,8 +35,27 @@ const showDialog = ref(false);  // 다이얼로그 상태
             <v-btn icon="mdi-magnify" variant="text"></v-btn>
             <v-btn icon="mdi-filter" variant="text"></v-btn>
         </template>
-        <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
+        <!-- 햄버거 모양-->
+        <!-- <v-btn icon="mdi-dots-vertical" variant="text"></v-btn> -->
+        <!-- 메뉴 버튼 -->
+        <v-menu>
+            <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" icon="mdi-dots-vertical" variant="text"></v-btn>
+            </template>
 
+            <v-list>
+                <v-list-item>
+                    <v-btn block color="primary" @click="router.push('/login')">
+                        LogIn
+                    </v-btn>
+                </v-list-item>
+                <v-list-item>
+                    <v-btn block color="primary" @click="handleLogout">
+                        LogOut
+                    </v-btn>
+                </v-list-item>
+            </v-list>
+        </v-menu>
     </v-app-bar>
 
     <!-- 모바일에서만 네비게이션 드로어 하단으로 이동 -->
