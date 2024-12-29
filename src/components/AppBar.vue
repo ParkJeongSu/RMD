@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useDisplay } from 'vuetify';
+import { disconnectWebSocket } from '@/websocket/websocker';
 
 // 반응형 디스플레이
 const { mobile, mdAndUp } = useDisplay();
@@ -18,6 +19,7 @@ const router = useRouter();
 const handleLogout = () => {
     authStore.logout();
     router.push('/login');
+    disconnectWebSocket();
 };
 
 </script>
