@@ -35,17 +35,19 @@
   <defs
      id="defs1" />
   <rect
-     style="fill:none;stroke-width:2.86500004;stroke:#000000;stroke-dasharray:none"
+     style="stroke-width:2.86500004;stroke:#000000;stroke-dasharray:none"
      id="A1machine3"
      width="48.587559"
      height="34.900921"
      x="41.744236"
-     y="43.455067" />
+     y="43.455067" 
+     fill="white"/>
   <rect
-     style="fill:none;stroke:#000000;stroke-width:2.865;stroke-dasharray:none"
+     style="stroke:#000000;stroke-width:2.865;stroke-dasharray:none"
      id="A1machine6"
      width="48.587559"
      height="34.900921"
      x="41.064354"
-     y="102.72002" />
+     y="102.72002" 
+     fill="white"/>
 </svg>

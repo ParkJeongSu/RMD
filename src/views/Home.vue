@@ -5,6 +5,7 @@ import { useSvgStore } from '@/stores/svgStore';
 const svgStore = useSvgStore();
 
 const selectedHeader = computed(() => svgStore.currentMenuName);
+const svgMap = computed(() => svgStore.svgMap);
 
 </script>
 
@@ -13,7 +14,8 @@ const selectedHeader = computed(() => svgStore.currentMenuName);
   <v-container v-if="svgStore.svgLoadCompleted">
     <!-- SVG 렌더링 -->
     <v-container class="text-center">
-      <div v-html="svgStore.svgMap[selectedHeader]" v-if="selectedHeader"></div>
+      <!-- <div v-html="svgStore.svgMap[selectedHeader]" v-if="selectedHeader"></div> -->
+      <div v-html="svgMap[selectedHeader]" v-if="selectedHeader"></div>
     </v-container>
   </v-container>
   <!-- 로딩 상태 -->

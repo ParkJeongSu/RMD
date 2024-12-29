@@ -19,7 +19,7 @@ const handleLogin = async () => {
         const response = await login(username.value, password.value);
         authStore.login(username.value);
         router.push('/');  // 로그인 성공 시 홈으로 리다이렉트
-        svgStore.loadSvgFiles();
+        await svgStore.loadSvgFiles();
         connectWebSocket();
     }
     catch (error) {

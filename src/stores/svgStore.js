@@ -21,16 +21,33 @@ export const useSvgStore = defineStore('svg', () => {
   }
 
   // 특정 SVG 부분 색상 변경
-  function updateSvgColor(headerName, selector, color) {
-    if (svgMap.value[headerName]) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(svgMap.value[headerName], 'image/svg+xml');
-      const targetElement = doc.querySelector(selector);
-      if (targetElement) {
-        targetElement.setAttribute('fill', color);
-        svgMap.value[headerName] = doc.documentElement.outerHTML;  // 업데이트
+  function updateSvgColor(obj) {
+    if(svgLoadCompleted.value === true)
+    {
+      const object = JSON.parse(obj);
+      const newSVGList = {};
+      for(const [svgFileName,svgContent] of Object.entries(svgMap.value))
+      {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(svgContent, 'image/svg+xml');
+        const targetElement = doc.querySelector('#' + object.objectName);
+        if (targetElement) {
+          targetElement.setAttribute('fill', 'red');
+        }
+        newSVGList[svgFileName] = doc.documentElement.outerHTML;
       }
+      svgMap.value = newSVGList;
     }
+
+    // if (svgMap.value[headerName]) {
+    //   const parser = new DOMParser();
+    //   const doc = parser.parseFromString(svgMap.value[headerName], 'image/svg+xml');
+    //   const targetElement = doc.querySelector(selector);
+    //   if (targetElement) {
+    //     targetElement.setAttribute('fill', color);
+    //     svgMap.value[headerName] = doc.documentElement.outerHTML;  // 업데이트
+    //   }
+    // }
   }
 
   function setMenuName(menuName) {
