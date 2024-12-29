@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
 import { useSvgStore } from '@/stores/svgStore';
 import { useRouter } from 'vue-router';
+import { login } from '@/api/auth';
 
 const authStore = useAuthStore();
 const svgStore = useSvgStore();
@@ -10,12 +11,17 @@ const router = useRouter();
 
 const username = ref('');
 const password = ref('');
+const errorMessage = ref('');
 
-const handleLogin = () => {
-    if (username.value && password.value) {
-        authStore.login({ username: username.value });
+const handleLogin = async () => {
+    try {
+        const response = await login(username.value, password.value);
+        authStore.login(username.value);
         router.push('/');  // 로그인 성공 시 홈으로 리다이렉트
         svgStore.loadSvgFiles();
+    }
+    catch (error) {
+        errorMessage.value = error.message || 'Login failed. Please try again.';
     }
 };
 </script>
@@ -30,8 +36,10 @@ const handleLogin = () => {
                     <v-text-field label="Password" v-model="password" type="password"></v-text-field>
                     <v-btn block type="submit" color="primary">Login</v-btn>
                 </v-form>
+                <v-alert v-if="errorMessage" type="error" class="mt-3">
+                    {{ errorMessage }}
+                </v-alert>
             </v-card-text>
         </v-card>
     </v-container>
 </template>
-

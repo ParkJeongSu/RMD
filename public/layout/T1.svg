@@ -24,14 +24,14 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      inkscape:zoom="0.77326038"
-     inkscape:cx="428.05762"
+     inkscape:cx="428.70424"
      inkscape:cy="400.89989"
      inkscape:window-width="1920"
      inkscape:window-height="1112"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="A1" />
+     inkscape:current-layer="T1" />
   <defs
      id="defs1" />
   <rect
@@ -43,37 +43,9 @@
      y="43.463528" />
   <rect
      style="fill:none;stroke:#000000;stroke-width:2.865;stroke-dasharray:none"
-     id="T1machine2"
-     width="48.587559"
-     height="34.900921"
-     x="196.86595"
-     y="45.214218" />
-  <rect
-     style="fill:none;stroke-width:2.86500004;stroke:#000000;stroke-dasharray:none"
-     id="T1machine3"
-     width="48.587559"
-     height="34.900921"
-     x="41.744236"
-     y="43.455067" />
-  <rect
-     style="fill:none;stroke:#000000;stroke-width:2.865;stroke-dasharray:none"
      id="T1machine4"
      width="48.587559"
      height="34.900921"
      x="119.73138"
      y="102.72849" />
-  <rect
-     style="fill:none;stroke:#000000;stroke-width:2.865;stroke-dasharray:none"
-     id="T1machine5"
-     width="48.587559"
-     height="34.900921"
-     x="196.18607"
-     y="104.47918" />
-  <rect
-     style="fill:none;stroke:#000000;stroke-width:2.865;stroke-dasharray:none"
-     id="T1machine6"
-     width="48.587559"
-     height="34.900921"
-     x="41.064354"
-     y="102.72002" />
 </svg>

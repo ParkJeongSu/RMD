@@ -1,10 +1,10 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useSvgStore } from '@/stores/svgStore';
 
 const svgStore = useSvgStore();
 
-const selectedHeader = svgStore.defaultMenuName
+const selectedHeader = computed(() => svgStore.currentMenuName);
 
 </script>
 

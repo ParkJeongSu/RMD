@@ -12,6 +12,15 @@ export default defineConfig({
     vueJsx(),
     vueDevTools(),
   ],
+  server:{
+    proxy:{
+      '/api':{
+        target:'http://localhost:8082',
+        changeOrigin:true,
+        rewrite:(path)=> path.replace(/^\/api/, '')
+      }
+    }
+  },
   build:{
     sourcemap : true // source map active
   },

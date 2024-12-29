@@ -5,7 +5,7 @@ import { ref } from 'vue';
 export const useSvgStore = defineStore('svg', () => {
   const svgMap = ref({});
   const svgLoadCompleted = ref(false);
-  const defaultMenuName = ref('A1');
+  const currentMenuName = ref('A1');
 
   // SVG 미리 로드
   async function loadSvgFiles() {
@@ -33,9 +33,9 @@ export const useSvgStore = defineStore('svg', () => {
     }
   }
 
-  function modifyMenuName(menuName) {
-    defaultMenuName.value = menuName;
+  function setMenuName(menuName) {
+    currentMenuName.value = menuName;
   }
 
-  return { svgMap, svgLoadCompleted,defaultMenuName,loadSvgFiles, updateSvgColor ,modifyMenuName};
+  return { svgMap, svgLoadCompleted,currentMenuName,loadSvgFiles, updateSvgColor ,setMenuName};
 });

@@ -1,26 +1,23 @@
 <script setup>
 import { ref } from 'vue';
-import { useAppStore } from '@/stores/appStore';
+import { useSvgStore } from '@/stores/svgStore';
 
-const tab = ref('home');
-const appStore = useAppStore();
 
-const changeContent = (value) => {
-  if (value === 'reports') {
-    appStore.setContent('Reports Content');
-  } else if (value === 'settings') {
-    appStore.setContent('Settings Content');
-  } else {
-    appStore.setContent('Home Content');
-  }
+const svgStore = useSvgStore();
+
+const tab = ref(svgStore.currentMenuName);
+
+const setCurrentMenuName = (value) => {
+  svgStore.setMenuName(value);
 };
+
 </script>
 
 <template>
-    <!-- Tabs -->
-    <v-tabs v-model="tab" align-tabs="center" color="primary" @update:modelValue="changeContent">
-        <v-tab value="A1">A1</v-tab>
-        <v-tab value="T1">T1</v-tab>
-        <v-tab value="E1">E1</v-tab>
-    </v-tabs>
+  <!-- Tabs -->
+  <v-tabs v-model="tab" align-tabs="center" color="primary" @update:modelValue="setCurrentMenuName">
+    <v-tab value="A1">A1</v-tab>
+    <v-tab value="T1">T1</v-tab>
+    <v-tab value="E1">E1</v-tab>
+  </v-tabs>
 </template>
