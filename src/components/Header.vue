@@ -31,7 +31,7 @@ function refreshContent() {
       </div>
 
       <!-- Refresh 버튼 (아이콘) -->
-      <v-btn icon="mdi-refresh" @click="refreshContent" class="refresh-btn" >
+      <v-btn icon="mdi-refresh" @click="refreshContent" class="refresh-btn">
       </v-btn>
 
     </v-row>
@@ -45,7 +45,7 @@ function refreshContent() {
 .tab-container {
   position: relative;
   width: 100%;
-  z-index: 9999;
+  z-index: 1500;
 }
 
 /* v-tabs를 중앙에 배치 */
@@ -53,13 +53,14 @@ function refreshContent() {
   display: flex;
   justify-content: center;
   flex-grow: 1;
+  z-index: 1500;
 }
 
 /* Refresh 버튼 우측 고정 */
 .refresh-btn {
   position: fixed;
-  top : 65px;
+  top: 65px;
   right: 20px;
-  z-index: 9999;
+  z-index: 1500;
 }
 </style>
