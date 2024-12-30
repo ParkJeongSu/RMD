@@ -45,6 +45,7 @@ function refreshContent() {
 .tab-container {
   position: relative;
   width: 100%;
+  z-index: 9999;
 }
 
 /* v-tabs를 중앙에 배치 */
@@ -56,7 +57,9 @@ function refreshContent() {
 
 /* Refresh 버튼 우측 고정 */
 .refresh-btn {
-  position: absolute;
-  right: 0;
+  position: fixed;
+  top : 65px;
+  right: 20px;
+  z-index: 9999;
 }
 </style>
