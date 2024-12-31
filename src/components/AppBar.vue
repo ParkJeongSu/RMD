@@ -68,20 +68,20 @@ const uploadFile = async () => {
 
 // 테이블 데이터
 const items = ref([
-  { typeName: 'Type1', TypeAttribute: 'Attr1', StateName: 'Active', TypeAttributeValue: '10' },
-  { typeName: 'Type2', TypeAttribute: 'Attr2', StateName: 'Inactive', TypeAttributeValue: '20' }
+  { typeName: 'Type1', StateName: 'Active', TypeAttribute: 'Attr1',  TypeAttributeValue: '10' },
+  { typeName: 'Type2', StateName: 'Inactive', TypeAttribute: 'Attr2',  TypeAttributeValue: '20' }
 ]);
 
 // 테이블 헤더
 const headers = [
   { title: 'Type Name', value: 'typeName' },
-  { title: 'Type Attribute', value: 'TypeAttribute' },
   { title: 'State Name', value: 'StateName' },
+  { title: 'Type Attribute', value: 'TypeAttribute' },
   { title: 'Type Attribute Value', value: 'TypeAttributeValue' }
 ];
 
 // 선택된 항목 및 다이얼로그 상태
-const selected = ref([]);
+//const selected = ref([]);
 const dialog = ref(false);
 const isEdit = ref(false);
 const selectedItem = ref(null);
@@ -95,15 +95,11 @@ const editedItem = reactive({
 });
 
 // 선택된 행 업데이트
-const onRowSelected = (value) => {
-  console.log(value);
-  selectedItem.value = value.length > 0 ? value[0] : null;
-  if (value.length <= 0) {
-    selectedItem.value = null;
-  }
-  else {
-    const valueArray = value[0].split("-");
-    selectedItem.value = items.value.find(item => item.typeName === valueArray[0] && item.StateName === valueArray[1])
+const onRowSelected = (selectedRows) => {
+  if (selectedRows.length > 0) {
+    selectedItem.value = selectedRows[selectedRows.length - 1]
+  } else {
+    selectedItem.value = null
   }
 };
 
@@ -117,8 +113,10 @@ const openCreateDialog = () => {
 // 수정 다이얼로그 열기
 const openEditDialog = () => {
   isEdit.value = true;
-  if (selected.value.length > 0) {
-    Object.assign(editedItem, selectedItem.value);
+  if (selectedItem.value.length > 0) {
+    const selectedItemSplit = selectedItem.value.split("-");
+    const fintItemByselectedItem = items.value.find(item => item.typeName === selectedItemSplit[0] && item.StateName === selectedItemSplit[1]);
+    Object.assign(editedItem, fintItemByselectedItem);
     dialog.value = true;
   }
 };
@@ -126,7 +124,7 @@ const openEditDialog = () => {
 // 항목 저장
 const saveItem = () => {
   if (isEdit.value) {
-    const index = items.value.findIndex(item => item.typeName === editedItem.typeName);
+    const index = items.value.findIndex(item => item.typeName === editedItem.typeName && item.StateName === editedItem.StateName );
     items.value[index] = { ...editedItem };
   } else {
     items.value.push({ ...editedItem });
@@ -136,13 +134,12 @@ const saveItem = () => {
 
 // 항목 삭제
 const deleteItem = () => {
-  selected.value.forEach((selected) => {
-    const index = items.value.findIndex(item => item.typeName === selected.typeName);
-    if (index !== -1) {
-      items.value.splice(index, 1);
-    }
-  });
-  selected.value = [];
+  if (selectedItem.value.length > 0) {
+    const selectedItemSplit = selectedItem.value.split("-");
+    const index = items.value.findIndex(item => item.typeName === selectedItemSplit[0] && item.StateName === selectedItemSplit[1]);
+    items.value.splice(index, 1);
+    selectedItem.value = null;
+  }
 };
 
 </script>
@@ -227,9 +224,11 @@ const deleteItem = () => {
               </v-card-title>
               <!--item-value="(item) => `${item.typeName}-${item.StateName}`" -->
               <!--item-value="typeName" -->
-              <v-data-table v-model="selected" :headers="headers" :items="items"
+              <!-- @update:model-value="onRowSelected" -->
+              <v-data-table :model-value="[selectedItem]" :headers="headers" :items="items"
                 :item-value="(item) => `${item.typeName}-${item.StateName}`" show-select
-                @update:model-value="onRowSelected">
+                @update:model-value="onRowSelected"
+                >
               </v-data-table>
             </v-card>
 
@@ -241,9 +240,9 @@ const deleteItem = () => {
                 </v-card-title>
                 <v-card-text>
                   <v-form ref="form">
-                    <v-text-field v-model="editedItem.typeName" label="Type Name" required></v-text-field>
+                    <v-text-field v-model="editedItem.typeName" label="Type Name" :disabled="isEdit" required></v-text-field>
+                    <v-text-field v-model="editedItem.StateName" label="State Name" :disabled="isEdit" required></v-text-field>
                     <v-text-field v-model="editedItem.TypeAttribute" label="Type Attribute" required></v-text-field>
-                    <v-text-field v-model="editedItem.StateName" label="State Name" required></v-text-field>
                     <v-text-field v-model="editedItem.TypeAttributeValue" label="Type Attribute Value"
                       required></v-text-field>
                   </v-form>
