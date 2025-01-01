@@ -1,8 +1,12 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { useDisplay } from 'vuetify';
-import { disconnectWebSocket } from '@/websocket/websocker';
-import axios from 'axios';
+import { disconnectWebSocket } from '@/websocket/websocket';
+import { uploadFile } from '@/api/fileupload';
+// import { getRmdColorSet } from '@/api/rmdColorSet';
+import { useAuthStore } from '@/stores/authStore';
+import { usermdColorSetStore } from '@/stores/rmdColorSetStore';
+import { useRouter } from 'vue-router';
 
 // 반응형 디스플레이
 const { mobile, mdAndUp } = useDisplay();
@@ -13,11 +17,8 @@ const machineLegendDialog = ref(false);  // 다이얼로그 상태
 const stockerLegendDialog = ref(false);  // 다이얼로그 상태
 const portLegendDialog = ref(false);  // 다이얼로그 상태
 
-
-import { useAuthStore } from '@/stores/authStore';
-import { useRouter } from 'vue-router';
-
 const authStore = useAuthStore();
+const rmdColorSetStore = usermdColorSetStore();
 const router = useRouter();
 
 const handleLogout = () => {
@@ -43,41 +44,27 @@ const toggleFullScreen = () => {
 
 // file upload
 const file = ref(null);
+const handleFileUpload = () => {
+  uploadFile(file.value);
+}
 
-const uploadFile = async () => {
-  if (!file.value) {
-    alert('Please select a file first.');
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append('file', file.value);
-
-  try {
-    const response = await axios.post('/api/file/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
-    alert(response.data);
-  } catch (error) {
-    console.error(error);
-    alert('Upload failed.');
-  }
-};
 
 // 테이블 데이터
 const items = ref([
-  { typeName: 'Type1', StateName: 'Active', TypeAttribute: 'Attr1',  TypeAttributeValue: '10' },
-  { typeName: 'Type2', StateName: 'Inactive', TypeAttribute: 'Attr2',  TypeAttributeValue: '20' }
 ]);
+// const items = ref(await rmdColorSetStore.getRmdColorSetList());
+// const items = computed(() => rmdColorSetStore.getRmdColorSetList);
+// watch(() => rmdColorSetStore.getRmdColorSetList, (newVal) => {
+//   items.value = newVal || [];
+// });
 
 // 테이블 헤더
 const headers = [
   { title: 'Type Name', value: 'typeName' },
-  { title: 'State Name', value: 'StateName' },
-  { title: 'Type Attribute', value: 'TypeAttribute' },
-  { title: 'Type Attribute Value', value: 'TypeAttributeValue' }
+  { title: 'State Name', value: 'stateName' },
+  { title: 'State Value', value: 'stateValue' },
+  { title: 'Type Attribute', value: 'typeAttribute' },
+  { title: 'Type Attribute Value', value: 'typeAttributeValue' }
 ];
 
 // 선택된 항목 및 다이얼로그 상태
@@ -89,9 +76,9 @@ const selectedItem = ref(null);
 // 수정 / 생성 항목
 const editedItem = reactive({
   typeName: '',
-  TypeAttribute: '',
-  StateName: '',
-  TypeAttributeValue: ''
+  stateName: '',
+  typeAttribute: '',
+  typeAttributeValue: ''
 });
 
 // 선택된 행 업데이트
@@ -106,7 +93,7 @@ const onRowSelected = (selectedRows) => {
 // 생성 다이얼로그 열기
 const openCreateDialog = () => {
   isEdit.value = false;
-  Object.assign(editedItem, { typeName: '', TypeAttribute: '', StateName: '', TypeAttributeValue: '' });
+  Object.assign(editedItem, { typeName: '', stateName: '', typeAttribute: '', typeAttributeValue: '' });
   dialog.value = true;
 };
 
@@ -115,7 +102,7 @@ const openEditDialog = () => {
   isEdit.value = true;
   if (selectedItem.value.length > 0) {
     const selectedItemSplit = selectedItem.value.split("-");
-    const fintItemByselectedItem = items.value.find(item => item.typeName === selectedItemSplit[0] && item.StateName === selectedItemSplit[1]);
+    const fintItemByselectedItem = items.value.find(item => item.typeName === selectedItemSplit[0] && item.stateName === selectedItemSplit[1]);
     Object.assign(editedItem, fintItemByselectedItem);
     dialog.value = true;
   }
@@ -124,7 +111,7 @@ const openEditDialog = () => {
 // 항목 저장
 const saveItem = () => {
   if (isEdit.value) {
-    const index = items.value.findIndex(item => item.typeName === editedItem.typeName && item.StateName === editedItem.StateName );
+    const index = items.value.findIndex(item => item.typeName === editedItem.typeName && item.stateName === editedItem.stateName);
     items.value[index] = { ...editedItem };
   } else {
     items.value.push({ ...editedItem });
@@ -141,6 +128,16 @@ const deleteItem = () => {
     selectedItem.value = null;
   }
 };
+
+const clickSettingDialog = async () => {
+  SettingDialog.value = true;
+}
+
+
+onMounted(async () => {
+  await rmdColorSetStore.getRmdColorSetList();
+  items.value = rmdColorSetStore.rmdColorSetList;
+});
 
 </script>
 
@@ -170,7 +167,7 @@ const deleteItem = () => {
 
         <v-list>
           <v-list-item>
-            <v-btn block color="primary" @click="SettingDialog = true">
+            <v-btn block color="primary" @click="clickSettingDialog">
               Setting
             </v-btn>
           </v-list-item>
@@ -208,7 +205,7 @@ const deleteItem = () => {
           <v-card-title class="headline">SVG file Upload ( [FactoryName].svg )</v-card-title>
           <v-container>
             <v-file-input v-model="file" label="Select File"></v-file-input>
-            <v-btn color="primary" @click="uploadFile">Upload</v-btn>
+            <v-btn color="primary" @click="handleFileUpload">Upload</v-btn>
           </v-container>
 
           <v-card-title class="headline">RMD Color Setting</v-card-title>
@@ -226,9 +223,8 @@ const deleteItem = () => {
               <!--item-value="typeName" -->
               <!-- @update:model-value="onRowSelected" -->
               <v-data-table :model-value="[selectedItem]" :headers="headers" :items="items"
-                :item-value="(item) => `${item.typeName}-${item.StateName}`" show-select
-                @update:model-value="onRowSelected"
-                >
+                :item-value="(item) => `${item.typeName}-${item.stateName}`" show-select
+                @update:model-value="onRowSelected">
               </v-data-table>
             </v-card>
 
@@ -240,10 +236,12 @@ const deleteItem = () => {
                 </v-card-title>
                 <v-card-text>
                   <v-form ref="form">
-                    <v-text-field v-model="editedItem.typeName" label="Type Name" :disabled="isEdit" required></v-text-field>
-                    <v-text-field v-model="editedItem.StateName" label="State Name" :disabled="isEdit" required></v-text-field>
-                    <v-text-field v-model="editedItem.TypeAttribute" label="Type Attribute" required></v-text-field>
-                    <v-text-field v-model="editedItem.TypeAttributeValue" label="Type Attribute Value"
+                    <v-text-field v-model="editedItem.typeName" label="Type Name" :disabled="isEdit"
+                      required></v-text-field>
+                    <v-text-field v-model="editedItem.stateName" label="State Name" :disabled="isEdit"
+                      required></v-text-field>
+                    <v-text-field v-model="editedItem.typeAttribute" label="Type Attribute" required></v-text-field>
+                    <v-text-field v-model="editedItem.typeAttributeValue" label="Type Attribute Value"
                       required></v-text-field>
                   </v-form>
                 </v-card-text>

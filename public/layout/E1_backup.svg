@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Dimensions" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4429.24 240.26">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 10.93px;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill: #231815;
+        font-family: MicrosoftYaHeiLight, 'Microsoft YaHei';
+      }
+
+      .cls-2 {
+        font-size: 18px;
+      }
+
+      .cls-3 {
+        font-size: 12px;
+      }
+
+      .cls-4 {
+        fill: none;
+      }
+
+      .cls-5 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-6 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-7 {
+        letter-spacing: -.04em;
+      }
+
+      .cls-8 {
+        letter-spacing: -.07em;
+      }
+
+      .cls-9 {
+        fill: #fdfce2;
+        stroke: #231815;
+        stroke-miterlimit: 10;
+      }
+    </style>
+  </defs>
+  <g id="M1E1MASY01">
+    <rect id="M1E1MASY01-2" data-name="M1E1MASY01" class="cls-9" x="1138.12" y="22.14" width="249.16" height="147.24"/>
+    <rect id="M1E1MASY01ASY100" class="cls-9" x="1144.52" y="31.14" width="232.95" height="129.25"/>
+    <text class="cls-3" transform="translate(1206.76 190.79)"><tspan x="0" y="0">背光组装机</tspan></text>
+    <rect id="PORT11" class="cls-9" x="1117.94" y="48.28" width="40.36" height="46.49"/>
+    <rect id="PORT12" class="cls-9" x="1117.94" y="108.28" width="40.36" height="46.49"/>
+  </g>
+  <g id="M1E1MLAM01">
+    <rect id="M1E1MLAM01-2" data-name="M1E1MLAM01" class="cls-9" x="17.15" y="25.59" width="1024.83" height="147.24"/>
+    <rect id="M1E1MLAM01MET100" class="cls-9" x="682.97" y="34.59" width="168.03" height="129.25"/>
+    <rect id="M1E1MLAM01GAC100" class="cls-9" x="553.73" y="34.59" width="129.25" height="129.25"/>
+    <rect id="M1E1MLAM01HTH100" class="cls-9" x="345.36" y="34.59" width="208.36" height="129.25"/>
+    <rect id="M1E1MLAM01STH100" class="cls-9" x="212.27" y="34.59" width="133.09" height="129.25"/>
+    <rect id="M1E1MLAM01CLN100" class="cls-9" x="129.78" y="34.59" width="82.49" height="64.62"/>
+    <rect id="M1E1MLAM01GDR100" class="cls-9" x="65.16" y="34.59" width="64.62" height="64.62"/>
+    <rect id="M1E1MLAM01LDR100" class="cls-9" x="65.16" y="99.21" width="147.12" height="64.62"/>
+    <rect id="PORT" class="cls-9" x="24.96" y="43.65" width="40.36" height="46.49"/>
+    <rect id="PORT-2" data-name="PORT" class="cls-9" x="24.96" y="108.28" width="40.36" height="46.49"/>
+    <rect id="PORT-3" data-name="PORT" class="cls-9" x="1026.17" y="48.28" width="40.36" height="46.49"/>
+    <rect id="PORT-4" data-name="PORT" class="cls-9" x="1026.17" y="108.28" width="40.36" height="46.49"/>
+    <rect id="M1E1MLAM01UVC100" class="cls-9" x="851" y="34.59" width="182.88" height="129.25"/>
+    <text class="cls-3" transform="translate(73.69 191.52)"><tspan x="0" y="0">上料机</tspan></text>
+    <text class="cls-3" transform="translate(73.69 15.41)"><tspan class="cls-7" x="0" y="0">C</tspan><tspan x="7.52" y="0">G上料机</tspan></text>
+    <text class="cls-3" transform="translate(252.69 193)"><tspan x="0" y="0">软贴</tspan></text>
+    <text class="cls-3" transform="translate(427.11 191.52)"><tspan x="0" y="0">硬贴</tspan></text>
+    <text class="cls-3" transform="translate(602.25 191.52)"><tspan x="0" y="0">脱泡</tspan></text>
+    <text class="cls-3" transform="translate(712.69 191.52)"><tspan x="0" y="0">人工检测</tspan></text>
+    <text class="cls-3" transform="translate(885.94 191.52)"><tspan x="0" y="0">UV+下料机</tspan></text>
+    <text class="cls-2" transform="translate(0 15.41)"><tspan x="0" y="0">1 # </tspan></text>
+  </g>
+  <g id="M1E1MSMT01">
+    <rect id="M1E1MSMT01-2" data-name="M1E1MSMT01" class="cls-9" x="1387.28" y="22.14" width="423.49" height="147.24"/>
+    <rect id="M1E1MSMT01ETT100" class="cls-9" x="1392.99" y="31.14" width="218.47" height="129.25"/>
+    <rect id="M1E1MSMT01OTP100" class="cls-9" x="1611.46" y="31.14" width="192.55" height="129.25"/>
+    <text class="cls-3" transform="translate(1469.32 190.79)"><tspan x="0" y="0">简单模组 </tspan><tspan class="cls-8" x="51.55" y="0">O</tspan><tspan x="60.54" y="0">TP</tspan></text>
+    <text class="cls-3" transform="translate(1688.91 190.79)"><tspan x="0" y="0">ET2</tspan></text>
+  </g>
+  <text class="cls-3" transform="translate(2185.19 187.71)"><tspan x="0" y="0">老化</tspan></text>
+  <rect id="M1E1MAGG01" class="cls-9" x="1963.99" y="22.14" width="491.65" height="147.24"/>
+  <rect id="M1E1MAGG01AGG100" class="cls-9" x="1981.3" y="31.14" width="467.79" height="129.25"/>
+  <g id="M1E1MCMA01">
+    <rect id="M1E1MCMA01-2" data-name="M1E1MCMA01" class="cls-9" x="2604.75" y="22.14" width="933.8" height="147.24"/>
+    <rect id="M1E1MCMA01SCM300" class="cls-9" x="3406.01" y="31.14" width="111.45" height="129.25"/>
+    <rect id="M1E1MCMA01SCM200" class="cls-9" x="3294.56" y="31.14" width="111.45" height="129.25"/>
+    <rect id="M1E1MCMA01SCM100" class="cls-9" x="3183.11" y="31.14" width="111.45" height="129.25"/>
+    <rect id="M1E1MCMA01BSA100" class="cls-9" x="3071.65" y="31.14" width="111.45" height="129.25"/>
+    <rect id="M1E1MCMA01MAI100" class="cls-9" x="2960.2" y="31.14" width="111.45" height="129.25"/>
+    <rect id="M1E1MCMA01MPB100" class="cls-9" x="2848.75" y="31.14" width="111.45" height="129.25"/>
+    <rect id="M1E1MCMA01SAI100" class="cls-9" x="2737.3" y="31.14" width="111.45" height="129.25"/>
+    <rect id="M1E1MCMA01SPB100" class="cls-9" x="2625.85" y="31.14" width="111.45" height="129.25"/>
+    <text class="cls-3" transform="translate(2651.87 187.57)"><tspan x="0" y="0">PCB组装</tspan></text>
+    <text class="cls-1" transform="translate(2762.94 187.57) scale(1.1 1)"><tspan x="0" y="0">PCB </tspan><tspan class="cls-5" x="23.41" y="0">A</tspan><tspan x="30.6" y="0">OI</tspan></text>
+    <text class="cls-3" transform="translate(2880.86 187.57)"><tspan x="0" y="0">FPC插接</tspan></text>
+    <text class="cls-3" transform="translate(2984.37 187.57)"><tspan x="0" y="0">FPC </tspan><tspan class="cls-6" x="24.67" y="0">A</tspan><tspan x="32.57" y="0">OI</tspan></text>
+    <text class="cls-3" transform="translate(3106.75 188.17)"><tspan x="0" y="0">后壳组装</tspan></text>
+    <text class="cls-3" transform="translate(3208.71 187.57)"><tspan x="0" y="0">螺丝机 1</tspan></text>
+    <text class="cls-3" transform="translate(3323.49 188.17)"><tspan x="0" y="0">螺丝机 2</tspan></text>
+    <text class="cls-3" transform="translate(3432.18 188.17)"><tspan x="0" y="0">螺丝机 3</tspan></text>
+  </g>
+  <g id="M1E1MCMT01">
+    <text class="cls-3" transform="translate(3680.56 187.98)"><tspan x="0" y="0">复杂模组 </tspan><tspan class="cls-8" x="51.55" y="0">O</tspan><tspan x="60.54" y="0">TP</tspan></text>
+    <text class="cls-3" transform="translate(3850.63 188.67)"><tspan x="0" y="0">LMK</tspan></text>
+    <text class="cls-3" transform="translate(4172.29 188.67)"><tspan x="0" y="0">ET3</tspan></text>
+    <text class="cls-3" transform="translate(4010.18 189.49)"><tspan x="0" y="0">TP划线</tspan></text>
+    <text class="cls-3" transform="translate(4323.84 187.98)"><tspan x="0" y="0">贴标机</tspan></text>
+    <rect id="M1E1MCMT01-2" data-name="M1E1MCMT01" class="cls-9" x="3647.1" y="22.14" width="781.64" height="147.24"/>
+    <rect id="M1E1MCMT01ALB100" class="cls-9" x="4260.11" y="31.14" width="155.53" height="129.25"/>
+    <rect id="M1E1MCMT01EFT100" class="cls-9" x="4109.27" y="31.14" width="150.85" height="129.25"/>
+    <rect id="M1E1MCMT01TPS100" class="cls-9" x="3958.42" y="31.14" width="150.85" height="129.25"/>
+    <rect id="M1E1MCMT01LMK100" class="cls-9" x="3807.57" y="31.14" width="150.85" height="129.25"/>
+    <rect id="M1E1MCMT01OTP100" class="cls-9" x="3658.8" y="31.14" width="148.77" height="129.25"/>
+  </g>
+  <rect id="M1E1MCMT01-3" data-name="M1E1MCMT01" class="cls-4" x="3658.8" y="22.14" width="760.76" height="147.24"/>
+  <g id="LAM站点">
+    <rect class="cls-9" x="553.73" y="208.67" width="129.25" height="31.09"/>
+    <rect class="cls-9" x="682.97" y="208.67" width="168.03" height="31.09"/>
+    <rect class="cls-9" x="851" y="208.67" width="182.88" height="31.09"/>
+    <rect id="EL100" class="cls-9" x="17.15" y="208.67" width="536.58" height="31.09"/>
+    <text class="cls-2" transform="translate(235.9 232.11)"><tspan x="0" y="0">EL100</tspan></text>
+    <text class="cls-2" transform="translate(588.04 230.21)"><tspan 

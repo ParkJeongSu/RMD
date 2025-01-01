@@ -26,28 +26,32 @@
      inkscape:zoom="0.77326038"
      inkscape:cx="428.70424"
      inkscape:cy="400.89989"
-     inkscape:window-width="1920"
-     inkscape:window-height="1112"
-     inkscape:window-x="-8"
+     inkscape:window-width="1600"
+     inkscape:window-height="912"
+     inkscape:window-x="2392"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="T1" />
   <defs
      id="defs1" />
   <rect
-     style="stroke:#000000;stroke-width:2.865;stroke-dasharray:none"
      id="T1machine1"
      width="48.587559"
      height="34.900921"
      x="120.41126"
-     y="43.463528" 
-     fill="white"/>
+     y="43.463528"
+     fill="white"
+     stroke="#333333"
+     stroke-width="3"
+     type="Machine" />
   <rect
-     style="stroke:#000000;stroke-width:2.865;stroke-dasharray:none"
      id="T1machine4"
      width="48.587559"
      height="34.900921"
      x="119.73138"
-     y="102.72849" 
-     fill="white"/>
+     y="102.72849"
+     fill="white"
+     stroke="#333333"
+     stroke-width="3"
+     type="Machine" />
 </svg>

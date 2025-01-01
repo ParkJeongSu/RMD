@@ -1,11 +1,28 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { debounce } from 'lodash';
+import { ref, computed, watch, nextTick } from 'vue';
 import { useSvgStore } from '@/stores/svgStore';
 
+
+const defaultFactoryName = 'A1';
 const svgStore = useSvgStore();
 
-const selectedHeader = computed(() => svgStore.currentMenuName);
-const svgMap = computed(() => svgStore.svgMap);
+const selectedHeader = ref(svgStore.currentMenuName || defaultFactoryName);
+//const selectedHeader = computed(() => svgStore.currentMenuName);
+// const svgMap = computed(() => svgStore.svgMap);
+
+const svgMap = ref(svgStore.svgMap);
+
+
+watch(() => svgStore.svgMap, debounce(async (newVal) => {
+  await nextTick();
+  svgMap.value = newVal;
+  await nextTick();
+}, 200));  // 200ms 딜레이
+
+watch(() => svgStore.currentMenuName, (newVal) => {
+  selectedHeader.value = newVal || defaultFactoryName;
+});
 
 </script>
 
