@@ -6,6 +6,7 @@ import { uploadFile } from '@/api/fileupload';
 // import { getRmdColorSet } from '@/api/rmdColorSet';
 import { useAuthStore } from '@/stores/authStore';
 import { usermdColorSetStore } from '@/stores/rmdColorSetStore';
+import { useSvgStore } from '@/stores/svgStore';
 import { useRouter } from 'vue-router';
 
 // 반응형 디스플레이
@@ -19,6 +20,8 @@ const portLegendDialog = ref(false);  // 다이얼로그 상태
 
 const authStore = useAuthStore();
 const rmdColorSetStore = usermdColorSetStore();
+const svgStore = useSvgStore();
+
 const router = useRouter();
 
 const handleLogout = () => {
@@ -47,6 +50,19 @@ const file = ref(null);
 const handleFileUpload = () => {
   uploadFile(file.value);
 }
+
+
+const DefaultFactoryList = ref(svgStore.rmdFactoryNameList);
+const currentDefaultFactoryName = ref('');
+watch(() => svgStore.rmdFactoryNameList, (newVal) => {
+  DefaultFactoryList.value = newVal ||[];
+  for(const defaultFactory of newVal){
+    if(defaultFactory.defaultFactoryFlag ==='Y'){
+      currentDefaultFactoryName.value = defaultFactory.factoryName;
+    }
+  }
+},{ deep: true }); // { deep: true }는 부하를 준다고 함. 추후 수정예정
+
 
 
 // 테이블 데이터
@@ -132,6 +148,9 @@ const deleteItem = () => {
 const clickSettingDialog = async () => {
   SettingDialog.value = true;
 }
+const clickDefaultFactoryName = (factoryName)=>{
+  svgStore.modifyDefaultFactory(factoryName);
+}
 
 
 onMounted(async () => {
@@ -189,17 +208,14 @@ onMounted(async () => {
         <v-card>
           <v-card-title class="headline">Default Factory Name</v-card-title>
           <v-container>
-            <v-row>
-              <v-col cols="2">
-                <v-btn class="defaultFactory">A1</v-btn>
-              </v-col>
-              <v-col cols="2">
-                <v-btn class="defaultFactory">T1</v-btn>
-              </v-col>
-              <v-col cols="2">
-                <v-btn class="defaultFactory">E1</v-btn>
+            <v-row class="row-spacing">
+              <v-col v-for="(item, index) in DefaultFactoryList" :key="index" cols="2">
+                <v-btn :class="{'defaultFactory' : item.factoryName !== currentDefaultFactoryName ,'green-button' : item.factoryName === currentDefaultFactoryName }"
+                  @click="clickDefaultFactoryName(item.factoryName)"
+                >{{ item.factoryName }}</v-btn>
               </v-col>
             </v-row>
+            <v-btn color="error" @click=" console.log('remove') ">DELETE</v-btn>
           </v-container>
 
           <v-card-title class="headline">SVG file Upload ( [FactoryName].svg )</v-card-title>
@@ -442,10 +458,19 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.row-spacing {
+  margin-bottom: 16px;  /* 원하는 여백 크기로 조정 */
+}
+
 .settingdialog {
   z-index: 10000;
 }
-
+.green-button {
+  background-color: green;
+  color: white;
+  width: 100%;
+  height: 100%;
+}
 .defaultFactory {
   width: 100%;
   height: 100%;

@@ -5,12 +5,16 @@ import { useSvgStore } from '@/stores/svgStore';
 
 const svgStore = useSvgStore();
 const currentTabName = ref(svgStore.currentMenuName);
-const tabNameList = ref(svgStore.rmdFactoryNameList);
+const rmdFactoryList = ref(svgStore.rmdFactoryNameList);
 
 
 // 로그인 후 svgStore.currentMenuName이 변경되면 반영
 watch(() => svgStore.currentMenuName, (newVal) => {
-  currentTabName.value = newVal || tabNameList.value[0];
+  currentTabName.value = newVal || rmdFactoryList.value[0].factoryName;
+});
+
+watch(() => svgStore.rmdFactoryNameList, (newVal) => {
+  rmdFactoryList.value = newVal ||[];
 });
 
 
@@ -41,7 +45,7 @@ function refreshContent() {
         <!-- Tabs -->
         <v-tabs :key="currentTabName" v-model="currentTabName" align-tabs="center" color="primary"
           @update:modelValue="setCurrentMenuName">
-          <v-tab v-for="tab in tabNameList" :key="tab" :value="tab">{{ tab }}</v-tab>
+          <v-tab v-for="(rmdFactory , index) in rmdFactoryList" :key="index" :value="rmdFactory.factoryName">{{ rmdFactory.factoryName }}</v-tab>
         </v-tabs>
       </div>
 

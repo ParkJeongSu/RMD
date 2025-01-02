@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { getrmdFactory } from '@/api/fileupload'
 import { usermdColorSetStore } from './rmdColorSetStore'
+import { updateDefaultFactory } from '@/api/rmdFactory'
 
 // SVG 상태 관리 스토어
 export const useSvgStore = defineStore('svg', () => {
@@ -22,8 +23,8 @@ export const useSvgStore = defineStore('svg', () => {
         currentMenuName.value = file.factoryName
       }
       svgFiles.push('/layout/' + file.factoryName + '.svg')
-      rmdFactoryNameList.value.push(file.factoryName)
     }
+    rmdFactoryNameList.value = rmdFactoryList;
 
     for (const path of svgFiles) {
       const response = await fetch(path) // fetch로 파일 가져오기
@@ -32,6 +33,14 @@ export const useSvgStore = defineStore('svg', () => {
       svgMap.value[fileName] = svgContent
     }
     svgLoadCompleted.value = true
+  }
+
+  function modifyDefaultFactory(factoryName){
+    const obj = rmdFactoryNameList.value.find( rmdFactory => rmdFactory.factoryName === factoryName);
+    updateDefaultFactory(obj);
+    rmdFactoryNameList.value.forEach(rmd => {
+      rmd.defaultFactoryFlag = (rmd.factoryName === factoryName) ? 'Y' : 'N';
+    });
   }
 
   /**
@@ -86,5 +95,6 @@ export const useSvgStore = defineStore('svg', () => {
     loadSvgFiles,
     updateSvgColor,
     setMenuName,
+    modifyDefaultFactory
   }
 })
