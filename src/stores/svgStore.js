@@ -10,6 +10,7 @@ export const useSvgStore = defineStore('svg', () => {
   const svgLoadCompleted = ref(false)
   const currentMenuName = ref('')
   const rmdFactoryNameList = ref([])
+  let updateQueue = Promise.resolve();
 
   // SVG 미리 로드
   async function loadSvgFiles() {
@@ -52,35 +53,48 @@ export const useSvgStore = defineStore('svg', () => {
    */
   // 특정 SVG 부분 색상 변경
   function updateSvgColor(obj) {
-    if (svgLoadCompleted.value === true) {
-      const rmdColorSetStore = usermdColorSetStore()
-      const object = JSON.parse(obj)
-      const newSVGList = {}
-      for (const [svgFileName, svgContent] of Object.entries(svgMap.value)) {
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(svgContent, 'image/svg+xml')
-        const targetElement = doc.querySelector('#' + object.objectName)
-        if (targetElement) {
-          const colorSetList = rmdColorSetStore.rmdColorSetList
-
-          for (let i = 0; i < colorSetList.length; i++) {
-            if (colorSetList[i].typeName === targetElement.getAttribute('type')) {
-              if (
-                object.stateName === colorSetList[i].stateName &&
-                object.stateValue === colorSetList[i].stateValue
-              ) {
-                targetElement.setAttribute(
-                  colorSetList[i].typeAttribute,
-                  colorSetList[i].typeAttributeValue,
-                )
+    updateQueue = updateQueue.then(
+      async() =>{
+        if (svgLoadCompleted.value === true) {
+          const rmdColorSetStore = usermdColorSetStore()
+          const object = JSON.parse(obj)
+          const newSVGList = {}
+          for (const [svgFileName, svgContent] of Object.entries(svgMap.value)) {
+            const parser = new DOMParser()
+            const doc = parser.parseFromString(svgContent, 'image/svg+xml')
+            const targetElement = doc.querySelector('#' + object.objectName)
+            if (targetElement) {
+              const colorSetList = rmdColorSetStore.rmdColorSetList
+              for (let i = 0; i < colorSetList.length; i++) {
+                if (colorSetList[i].typeName === targetElement.getAttribute('type')) {
+                  if (
+                    object.stateName === colorSetList[i].stateName &&
+                    object.stateValue === colorSetList[i].stateValue
+                  ) {
+                    targetElement.setAttribute(
+                      colorSetList[i].typeAttribute,
+                      colorSetList[i].typeAttributeValue,
+                    )
+                  }
+                }
               }
+
+              // 기존 tooltip 제거
+              const existingTooltip = targetElement.querySelector('title')
+              if (existingTooltip) {
+                existingTooltip.remove()
+              }
+              // Tooltip 추가
+              const tooltip = document.createElementNS('http://www.w3.org/2000/svg', 'title')
+              tooltip.textContent = object.tooltipText || 'Tooltip 정보 없음'
+              targetElement.appendChild(tooltip)
             }
+            newSVGList[svgFileName] = doc.documentElement.outerHTML
           }
+          svgMap.value = newSVGList
         }
-        newSVGList[svgFileName] = doc.documentElement.outerHTML
       }
-      svgMap.value = newSVGList
-    }
+    )
   }
 
   function setMenuName(menuName) {
