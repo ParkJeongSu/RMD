@@ -1,6 +1,6 @@
 <script setup>
 import { debounce } from 'lodash';
-import { ref, computed, watch, nextTick } from 'vue';
+import { ref, computed, watch, nextTick ,onMounted} from 'vue';
 import { useSvgStore } from '@/stores/svgStore';
 import PopupDialog from '@/components/PopupDialog.vue';
 
@@ -32,6 +32,12 @@ const handleDoubleClick = (event) => {
   dialogVisible.value = true;
   dialogTarget.value = event.target;
 };
+
+onMounted(() => {
+  console.log(`컴포넌트가 마운트 됐습니다.`)
+  svgStore.initSvgColor();
+
+})
 
 </script>
 

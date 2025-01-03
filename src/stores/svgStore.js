@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { getrmdFactory } from '@/api/fileupload'
 import { usermdColorSetStore } from './rmdColorSetStore'
 import { updateDefaultFactory } from '@/api/rmdFactory'
+import { getAllState } from '@/api/State'
 
 // SVG 상태 관리 스토어
 export const useSvgStore = defineStore('svg', () => {
@@ -10,7 +11,7 @@ export const useSvgStore = defineStore('svg', () => {
   const svgLoadCompleted = ref(false)
   const currentMenuName = ref('')
   const rmdFactoryNameList = ref([])
-  let updateQueue = Promise.resolve();
+  let updateQueue = Promise.resolve()
 
   // SVG 미리 로드
   async function loadSvgFiles() {
@@ -25,7 +26,7 @@ export const useSvgStore = defineStore('svg', () => {
       }
       svgFiles.push('/layout/' + file.factoryName + '.svg')
     }
-    rmdFactoryNameList.value = rmdFactoryList;
+    rmdFactoryNameList.value = rmdFactoryList
 
     for (const path of svgFiles) {
       const response = await fetch(path) // fetch로 파일 가져오기
@@ -36,12 +37,60 @@ export const useSvgStore = defineStore('svg', () => {
     svgLoadCompleted.value = true
   }
 
-  function modifyDefaultFactory(factoryName){
-    const obj = rmdFactoryNameList.value.find( rmdFactory => rmdFactory.factoryName === factoryName);
-    updateDefaultFactory(obj);
-    rmdFactoryNameList.value.forEach(rmd => {
-      rmd.defaultFactoryFlag = (rmd.factoryName === factoryName) ? 'Y' : 'N';
-    });
+  async function initSvgColor() {
+    const allState = await getAllState()
+    const rmdColorSetStore = usermdColorSetStore()
+    await rmdColorSetStore.getRmdColorSetList()
+
+    const newSVGList = {}
+
+    for (let state of allState) {
+      console.log(state)
+      for (const [svgFileName, svgContent] of Object.entries(svgMap.value)) {
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(svgContent, 'image/svg+xml')
+        const targetElement = doc.querySelector('#' + state.objectName)
+        if (targetElement) {
+          const colorSetList = rmdColorSetStore.rmdColorSetList
+          for (let i = 0; i < colorSetList.length; i++) {
+            if (colorSetList[i].typeName === targetElement.getAttribute('type')) {
+              if (
+                state.stateName === colorSetList[i].stateName &&
+                state.stateValue === colorSetList[i].stateValue
+              ) {
+                targetElement.setAttribute(
+                  colorSetList[i].typeAttribute,
+                  colorSetList[i].typeAttributeValue,
+                )
+              }
+            }
+          }
+
+          // 기존 tooltip 제거
+          const existingTooltip = targetElement.querySelector('title')
+          if (existingTooltip) {
+            existingTooltip.remove()
+          }
+          // Tooltip 추가
+          const tooltip = document.createElementNS('http://www.w3.org/2000/svg', 'title')
+          tooltip.textContent = state.tooltipText || 'Tooltip 정보 없음'
+          targetElement.appendChild(tooltip)
+        }
+        newSVGList[svgFileName] = doc.documentElement.outerHTML
+      }
+
+    }
+    svgMap.value = newSVGList
+  }
+
+  function modifyDefaultFactory(factoryName) {
+    const obj = rmdFactoryNameList.value.find(
+      (rmdFactory) => rmdFactory.factoryName === factoryName,
+    )
+    updateDefaultFactory(obj)
+    rmdFactoryNameList.value.forEach((rmd) => {
+      rmd.defaultFactoryFlag = rmd.factoryName === factoryName ? 'Y' : 'N'
+    })
   }
 
   /**
@@ -53,48 +102,46 @@ export const useSvgStore = defineStore('svg', () => {
    */
   // 특정 SVG 부분 색상 변경
   function updateSvgColor(obj) {
-    updateQueue = updateQueue.then(
-      async() =>{
-        if (svgLoadCompleted.value === true) {
-          const rmdColorSetStore = usermdColorSetStore()
-          const object = JSON.parse(obj)
-          const newSVGList = {}
-          for (const [svgFileName, svgContent] of Object.entries(svgMap.value)) {
-            const parser = new DOMParser()
-            const doc = parser.parseFromString(svgContent, 'image/svg+xml')
-            const targetElement = doc.querySelector('#' + object.objectName)
-            if (targetElement) {
-              const colorSetList = rmdColorSetStore.rmdColorSetList
-              for (let i = 0; i < colorSetList.length; i++) {
-                if (colorSetList[i].typeName === targetElement.getAttribute('type')) {
-                  if (
-                    object.stateName === colorSetList[i].stateName &&
-                    object.stateValue === colorSetList[i].stateValue
-                  ) {
-                    targetElement.setAttribute(
-                      colorSetList[i].typeAttribute,
-                      colorSetList[i].typeAttributeValue,
-                    )
-                  }
+    updateQueue = updateQueue.then(async () => {
+      if (svgLoadCompleted.value === true) {
+        const rmdColorSetStore = usermdColorSetStore()
+        const object = JSON.parse(obj)
+        const newSVGList = {}
+        for (const [svgFileName, svgContent] of Object.entries(svgMap.value)) {
+          const parser = new DOMParser()
+          const doc = parser.parseFromString(svgContent, 'image/svg+xml')
+          const targetElement = doc.querySelector('#' + object.objectName)
+          if (targetElement) {
+            const colorSetList = rmdColorSetStore.rmdColorSetList
+            for (let i = 0; i < colorSetList.length; i++) {
+              if (colorSetList[i].typeName === targetElement.getAttribute('type')) {
+                if (
+                  object.stateName === colorSetList[i].stateName &&
+                  object.stateValue === colorSetList[i].stateValue
+                ) {
+                  targetElement.setAttribute(
+                    colorSetList[i].typeAttribute,
+                    colorSetList[i].typeAttributeValue,
+                  )
                 }
               }
-
-              // 기존 tooltip 제거
-              const existingTooltip = targetElement.querySelector('title')
-              if (existingTooltip) {
-                existingTooltip.remove()
-              }
-              // Tooltip 추가
-              const tooltip = document.createElementNS('http://www.w3.org/2000/svg', 'title')
-              tooltip.textContent = object.tooltipText || 'Tooltip 정보 없음'
-              targetElement.appendChild(tooltip)
             }
-            newSVGList[svgFileName] = doc.documentElement.outerHTML
+
+            // 기존 tooltip 제거
+            const existingTooltip = targetElement.querySelector('title')
+            if (existingTooltip) {
+              existingTooltip.remove()
+            }
+            // Tooltip 추가
+            const tooltip = document.createElementNS('http://www.w3.org/2000/svg', 'title')
+            tooltip.textContent = object.tooltipText || 'Tooltip 정보 없음'
+            targetElement.appendChild(tooltip)
           }
-          svgMap.value = newSVGList
+          newSVGList[svgFileName] = doc.documentElement.outerHTML
         }
+        svgMap.value = newSVGList
       }
-    )
+    })
   }
 
   function setMenuName(menuName) {
@@ -109,6 +156,7 @@ export const useSvgStore = defineStore('svg', () => {
     loadSvgFiles,
     updateSvgColor,
     setMenuName,
-    modifyDefaultFactory
+    modifyDefaultFactory,
+    initSvgColor,
   }
 })
