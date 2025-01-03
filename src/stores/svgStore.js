@@ -42,8 +42,6 @@ export const useSvgStore = defineStore('svg', () => {
     const rmdColorSetStore = usermdColorSetStore()
     await rmdColorSetStore.getRmdColorSetList()
 
-    const newSVGList = {}
-
     for (let state of allState) {
       console.log(state)
       for (const [svgFileName, svgContent] of Object.entries(svgMap.value)) {
@@ -76,11 +74,10 @@ export const useSvgStore = defineStore('svg', () => {
           tooltip.textContent = state.tooltipText || 'Tooltip 정보 없음'
           targetElement.appendChild(tooltip)
         }
-        newSVGList[svgFileName] = doc.documentElement.outerHTML
+        console.log(doc.documentElement.outerHTML)
+        svgMap.value[svgFileName] = doc.documentElement.outerHTML
       }
-
     }
-    svgMap.value = newSVGList
   }
 
   function modifyDefaultFactory(factoryName) {
