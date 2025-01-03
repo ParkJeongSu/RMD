@@ -13,6 +13,7 @@ import { useRouter } from 'vue-router';
 const { mobile, mdAndUp } = useDisplay();
 
 const drawer = ref(false);
+const hambugerClick = ref(false);
 const SettingDialog = ref(false);  // 다이얼로그 상태
 const machineLegendDialog = ref(false);  // 다이얼로그 상태
 const stockerLegendDialog = ref(false);  // 다이얼로그 상태
@@ -161,7 +162,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="app-bar-wrapper">
+  <!--class="app-bar-wrapper"-->
+  <div :class="{'app-bar-wrapper' : !drawer&&!hambugerClick ,'app-bar-wrapper-click' : drawer || hambugerClick }">
     <v-app-bar color="primary" prominent class="app-bar">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"><v-icon>mdi-menu-open</v-icon></v-app-bar-nav-icon>
 
@@ -176,15 +178,13 @@ onMounted(async () => {
         <v-btn @click="toggleFullScreen" :icon="isFullScreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'"
           color="blue"></v-btn>
       </template>
-      <!-- 햄버거 모양-->
-      <!-- <v-btn icon="mdi-dots-vertical" variant="text"></v-btn> -->
-      <!-- 메뉴 버튼 -->
-      <v-menu>
+
+      <v-menu v-model="hambugerClick" @update:modelValue="hambugerClick = false">
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" icon="mdi-dots-vertical" variant="text"></v-btn>
+          <v-btn v-bind="props" icon="mdi-dots-vertical" variant="text" @click.stop="hambugerClick = !hambugerClick"></v-btn>
         </template>
 
-        <v-list>
+        <v-list >
           <v-list-item>
             <v-btn block color="primary" @click="clickSettingDialog">
               Setting
@@ -486,6 +486,19 @@ onMounted(async () => {
   /* AppBar 높이 */
   overflow: hidden;
   z-index: 1000;
+}
+
+.app-bar-wrapper-click .app-bar{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 64px;
+  /* AppBar 높이 */
+  z-index: 1000;
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* AppBar 숨기기 */

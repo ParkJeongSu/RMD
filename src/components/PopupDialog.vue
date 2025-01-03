@@ -99,12 +99,13 @@ const rightSize = ref(66.66);
       <v-card-title>
         Machine
       </v-card-title>
-      <v-container fluid>
+      <v-container fluid class="split-container">
         <!-- horizontal 속성 추가로 좌우 분할 -->
         <splitpanes class="default-theme">
           <!-- 왼쪽 Pane (테이블) -->
           <pane :size="leftSize">
-            <v-card-title>
+            <v-card>
+              <v-card-title>
               Machine Value
             </v-card-title>
             <v-table>
@@ -121,8 +122,8 @@ const rightSize = ref(66.66);
                 </tr>
               </tbody>
             </v-table>
+            </v-card>
           </pane>
-
           <!-- 오른쪽 Pane -->
           <pane :size="rightSize">
             <v-container fluid class="split-container">
@@ -130,7 +131,7 @@ const rightSize = ref(66.66);
                 <pane :size="50">
                   <v-card class="scrollable-pane">
                     <v-card-title>
-                      Port List
+                      SubMachine List
                     </v-card-title>
                     <v-data-table :items="items" show-expand></v-data-table>
                   </v-card>
@@ -153,6 +154,87 @@ const rightSize = ref(66.66);
       </v-card-actions>
     </v-card>
   </v-dialog>
+  <v-dialog v-if="visible === true && type === 'Stocker'" :model-value="visible" max-width="1000px"
+    @update:model-value="$emit('close')">
+    <v-card>
+      <v-card-title>
+        Machine
+      </v-card-title>
+      <v-container fluid class="split-container">
+        <!-- horizontal 속성 추가로 좌우 분할 -->
+        <splitpanes class="default-theme">
+          <!-- 왼쪽 Pane (테이블) -->
+          <pane :size="leftSize">
+            <v-card>
+              <v-card-title>
+              Machine Value
+            </v-card-title>
+            <v-table>
+              <thead>
+                <tr>
+                  <th class="text-left">Name</th>
+                  <th class="text-left">Calories</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in desserts" :key="item.name">
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.calories }}</td>
+                </tr>
+              </tbody>
+            </v-table>
+            </v-card>
+          </pane>
+          <!-- 오른쪽 Pane -->
+          <pane :size="rightSize">
+            <v-container fluid class="split-container">
+              <v-card class="scrollable-pane">
+                <v-card-title>
+                  Carrier List
+                </v-card-title>
+                <v-data-table :items="items" show-expand></v-data-table>
+              </v-card>
+            </v-container>
+          </pane>
+        </splitpanes>
+      </v-container>
+      <v-card-actions>
+        <v-btn color="primary" @click="$emit('close')">Close</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+  <v-dialog v-if="visible === true && type === 'Port'" :model-value="visible" max-width="1000px"
+    @update:model-value="$emit('close')">
+    <v-card>
+      <v-card-title>
+        Port
+      </v-card-title>
+      <v-container fluid class="split-container">
+        <v-card>
+              <v-card-title>
+              Port Value
+            </v-card-title>
+            <v-table>
+              <thead>
+                <tr>
+                  <th class="text-left">Name</th>
+                  <th class="text-left">Calories</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in desserts" :key="item.name">
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.calories }}</td>
+                </tr>
+              </tbody>
+            </v-table>
+            </v-card>
+      </v-container>
+      <v-card-actions>
+        <v-btn color="primary" @click="$emit('close')">Close</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 
 
 </template>
@@ -162,6 +244,11 @@ const rightSize = ref(66.66);
   height: 100vh;
   max-height: 600px;
   /* 최대 높이 설정 */
+  background-color: white;
+}
+
+.v-card-title {
+  /* background-color: white; */
 }
 
 .scrollable-pane {
