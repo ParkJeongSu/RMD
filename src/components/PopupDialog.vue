@@ -1,7 +1,8 @@
 <script setup>
-import { defineProps, computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
+defineEmits(['close'])
 
 const props = defineProps({
   visible: Boolean,
@@ -106,22 +107,22 @@ const rightSize = ref(66.66);
           <pane :size="leftSize">
             <v-card>
               <v-card-title>
-              Machine Value
-            </v-card-title>
-            <v-table>
-              <thead>
-                <tr>
-                  <th class="text-left">Name</th>
-                  <th class="text-left">Calories</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in desserts" :key="item.name">
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.calories }}</td>
-                </tr>
-              </tbody>
-            </v-table>
+                Machine Value
+              </v-card-title>
+              <v-table>
+                <thead>
+                  <tr>
+                    <th class="text-left">Name</th>
+                    <th class="text-left">Calories</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in desserts" :key="item.name">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.calories }}</td>
+                  </tr>
+                </tbody>
+              </v-table>
             </v-card>
           </pane>
           <!-- 오른쪽 Pane -->
@@ -167,22 +168,22 @@ const rightSize = ref(66.66);
           <pane :size="leftSize">
             <v-card>
               <v-card-title>
-              Machine Value
-            </v-card-title>
-            <v-table>
-              <thead>
-                <tr>
-                  <th class="text-left">Name</th>
-                  <th class="text-left">Calories</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in desserts" :key="item.name">
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.calories }}</td>
-                </tr>
-              </tbody>
-            </v-table>
+                Machine Value
+              </v-card-title>
+              <v-table>
+                <thead>
+                  <tr>
+                    <th class="text-left">Name</th>
+                    <th class="text-left">Calories</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in desserts" :key="item.name">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.calories }}</td>
+                  </tr>
+                </tbody>
+              </v-table>
             </v-card>
           </pane>
           <!-- 오른쪽 Pane -->
@@ -211,24 +212,24 @@ const rightSize = ref(66.66);
       </v-card-title>
       <v-container fluid class="split-container">
         <v-card>
-              <v-card-title>
-              Port Value
-            </v-card-title>
-            <v-table>
-              <thead>
-                <tr>
-                  <th class="text-left">Name</th>
-                  <th class="text-left">Calories</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in desserts" :key="item.name">
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.calories }}</td>
-                </tr>
-              </tbody>
-            </v-table>
-            </v-card>
+          <v-card-title>
+            Port Value
+          </v-card-title>
+          <v-table>
+            <thead>
+              <tr>
+                <th class="text-left">Name</th>
+                <th class="text-left">Calories</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in desserts" :key="item.name">
+                <td>{{ item.name }}</td>
+                <td>{{ item.calories }}</td>
+              </tr>
+            </tbody>
+          </v-table>
+        </v-card>
       </v-container>
       <v-card-actions>
         <v-btn color="primary" @click="$emit('close')">Close</v-btn>

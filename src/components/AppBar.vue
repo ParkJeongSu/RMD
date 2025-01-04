@@ -28,6 +28,7 @@ const router = useRouter();
 const handleLogout = () => {
   authStore.logout();
   router.push('/login');
+  localStorage.removeItem('token');
   disconnectWebSocket();
 };
 
@@ -56,13 +57,13 @@ const handleFileUpload = () => {
 const DefaultFactoryList = ref(svgStore.rmdFactoryNameList);
 const currentDefaultFactoryName = ref('');
 watch(() => svgStore.rmdFactoryNameList, (newVal) => {
-  DefaultFactoryList.value = newVal ||[];
-  for(const defaultFactory of newVal){
-    if(defaultFactory.defaultFactoryFlag ==='Y'){
+  DefaultFactoryList.value = newVal || [];
+  for (const defaultFactory of newVal) {
+    if (defaultFactory.defaultFactoryFlag === 'Y') {
       currentDefaultFactoryName.value = defaultFactory.factoryName;
     }
   }
-},{ deep: true }); // { deep: true }는 부하를 준다고 함. 추후 수정예정
+}, { deep: true }); // { deep: true }는 부하를 준다고 함. 추후 수정예정
 
 
 
@@ -149,7 +150,7 @@ const deleteItem = () => {
 const clickSettingDialog = async () => {
   SettingDialog.value = true;
 }
-const clickDefaultFactoryName = (factoryName)=>{
+const clickDefaultFactoryName = (factoryName) => {
   svgStore.modifyDefaultFactory(factoryName);
 }
 
@@ -163,7 +164,7 @@ onMounted(async () => {
 
 <template>
   <!--class="app-bar-wrapper"-->
-  <div :class="{'app-bar-wrapper' : !drawer&&!hambugerClick ,'app-bar-wrapper-click' : drawer || hambugerClick }">
+  <div :class="{ 'app-bar-wrapper': !drawer && !hambugerClick, 'app-bar-wrapper-click': drawer || hambugerClick }">
     <v-app-bar color="primary" prominent class="app-bar">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"><v-icon>mdi-menu-open</v-icon></v-app-bar-nav-icon>
 
@@ -181,10 +182,11 @@ onMounted(async () => {
 
       <v-menu v-model="hambugerClick" @update:modelValue="hambugerClick = false">
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" icon="mdi-dots-vertical" variant="text" @click.stop="hambugerClick = !hambugerClick"></v-btn>
+          <v-btn v-bind="props" icon="mdi-dots-vertical" variant="text"
+            @click.stop="hambugerClick = !hambugerClick"></v-btn>
         </template>
 
-        <v-list >
+        <v-list>
           <v-list-item>
             <v-btn block color="primary" @click="clickSettingDialog">
               Setting
@@ -210,12 +212,12 @@ onMounted(async () => {
           <v-container>
             <v-row class="row-spacing">
               <v-col v-for="(item, index) in DefaultFactoryList" :key="index" cols="2">
-                <v-btn :class="{'defaultFactory' : item.factoryName !== currentDefaultFactoryName ,'green-button' : item.factoryName === currentDefaultFactoryName }"
-                  @click="clickDefaultFactoryName(item.factoryName)"
-                >{{ item.factoryName }}</v-btn>
+                <v-btn
+                  :class="{ 'defaultFactory': item.factoryName !== currentDefaultFactoryName, 'green-button': item.factoryName === currentDefaultFactoryName }"
+                  @click="clickDefaultFactoryName(item.factoryName)">{{ item.factoryName }}</v-btn>
               </v-col>
             </v-row>
-            <v-btn color="error" @click=" console.log('remove') ">DELETE</v-btn>
+            <v-btn color="error" @click=" console.log('remove')">DELETE</v-btn>
           </v-container>
 
           <v-card-title class="headline">SVG file Upload ( [FactoryName].svg )</v-card-title>
@@ -459,18 +461,21 @@ onMounted(async () => {
 
 <style scoped>
 .row-spacing {
-  margin-bottom: 16px;  /* 원하는 여백 크기로 조정 */
+  margin-bottom: 16px;
+  /* 원하는 여백 크기로 조정 */
 }
 
 .settingdialog {
   z-index: 10000;
 }
+
 .green-button {
   background-color: green;
   color: white;
   width: 100%;
   height: 100%;
 }
+
 .defaultFactory {
   width: 100%;
   height: 100%;
@@ -488,7 +493,7 @@ onMounted(async () => {
   z-index: 1000;
 }
 
-.app-bar-wrapper-click .app-bar{
+.app-bar-wrapper-click .app-bar {
   position: absolute;
   top: 0;
   left: 0;

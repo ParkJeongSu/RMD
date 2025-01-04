@@ -11,7 +11,7 @@ const authStore = useAuthStore();
 <template>
   <v-app>
 
-    <AppBar/>
+    <AppBar />
 
     <v-main class=".v-main">
       <Header v-if="authStore.userInfo"></Header>

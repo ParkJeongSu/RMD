@@ -3,11 +3,18 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { getRmdColorSet } from '@/api/rmdColorSet'
 
-export const usermdColorSetStore = defineStore('rmdColorSet', () => {
-  const rmdColorSetList = ref([])
+export const usermdColorSetStore = defineStore(
+  'rmdColorSet',
+  () => {
+    const rmdColorSetList = ref([])
 
-  async function getRmdColorSetList() {
-    rmdColorSetList.value = await getRmdColorSet()
-  }
-  return { rmdColorSetList, getRmdColorSetList }
-})
+    async function getRmdColorSetList() {
+      rmdColorSetList.value = await getRmdColorSet()
+    }
+
+    return { rmdColorSetList, getRmdColorSetList }
+  },
+  {
+    persist: true,
+  }, // 상태를 지속적으로 저장
+)
