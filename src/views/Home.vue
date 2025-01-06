@@ -41,11 +41,6 @@ const handleDoubleClick = (event) => {
 };
 
 const handleWheel = (event) => {
-  // 기존 코드
-  // event.preventDefault();
-  // const zoomAmount = event.deltaY > 0 ? 0.9 : 1.1;
-  // scale.value *= zoomAmount;
-
   // gpt가 준 새로운 코드
   const container = event.currentTarget;
   const rect = container.getBoundingClientRect();
@@ -76,16 +71,14 @@ const handleMouseUp = () => {
 };
 
 const resetZoom = () => {
-  console.log('abc')
   scale.value = 1;
   translateX.value = 0;
   translateY.value = 0;
 };
 
 onMounted(() => {
-  console.log(`컴포넌트가 마운트 됐습니다.`)
+  console.log(`Home 컴포넌트가 마운트 됐습니다.`)
   svgStore.initSvgColor();
-
 })
 
 </script>

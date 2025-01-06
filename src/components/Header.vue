@@ -23,8 +23,6 @@ onMounted(async () => {
   // currentTabName.value = svgStore.currentMenuName || tabNameList.value[0];
   // svgStore.setMenuName(currentTabName.value);
   // await nextTick();
-
-
 });
 
 const setCurrentMenuName = (value) => {

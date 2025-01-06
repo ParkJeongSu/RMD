@@ -70,11 +70,6 @@ watch(() => svgStore.rmdFactoryNameList, (newVal) => {
 // 테이블 데이터
 const items = ref([
 ]);
-// const items = ref(await rmdColorSetStore.getRmdColorSetList());
-// const items = computed(() => rmdColorSetStore.getRmdColorSetList);
-// watch(() => rmdColorSetStore.getRmdColorSetList, (newVal) => {
-//   items.value = newVal || [];
-// });
 
 // 테이블 헤더
 const headers = [
