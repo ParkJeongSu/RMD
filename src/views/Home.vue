@@ -78,7 +78,7 @@ const resetZoom = () => {
 
 onMounted(() => {
   console.log(`Home 컴포넌트가 마운트 됐습니다.`)
-  svgStore.initSvgColor();
+  svgStore.initsvgColor();
 })
 
 </script>

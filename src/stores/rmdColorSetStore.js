@@ -1,18 +1,18 @@
 // src/stores/authStore.js
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getRmdColorSet } from '@/api/rmdColorSet'
+import { getRMDColorSet } from '@/api/RMDColorSet'
 
-export const usermdColorSetStore = defineStore(
-  'rmdColorSet',
+export const useRMDColorSetStore = defineStore(
+  'RMDColorSet',
   () => {
     const rmdColorSetList = ref([])
 
-    async function getRmdColorSetList() {
-      rmdColorSetList.value = await getRmdColorSet()
+    async function getRMDColorSetList() {
+      rmdColorSetList.value = await getRMDColorSet()
     }
 
-    return { rmdColorSetList, getRmdColorSetList }
+    return { rmdColorSetList, getRMDColorSetList }
   },
   {
     persist: true,

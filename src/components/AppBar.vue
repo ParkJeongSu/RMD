@@ -1,12 +1,10 @@
 <script setup>
 import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { useDisplay } from 'vuetify';
-import { disconnectWebSocket } from '@/websocket/websocket';
 import { uploadFile } from '@/api/fileupload';
-// import { getRmdColorSet } from '@/api/rmdColorSet';
 import { useAuthStore } from '@/stores/authStore';
-import { usermdColorSetStore } from '@/stores/rmdColorSetStore';
 import { useSvgStore } from '@/stores/svgStore';
+import { useRMDstore } from '@/stores/RMDStore';
 import { useRouter } from 'vue-router';
 
 // 반응형 디스플레이
@@ -20,16 +18,13 @@ const stockerLegendDialog = ref(false);  // 다이얼로그 상태
 const portLegendDialog = ref(false);  // 다이얼로그 상태
 
 const authStore = useAuthStore();
-const rmdColorSetStore = usermdColorSetStore();
 const svgStore = useSvgStore();
+const RMDStore = useRMDstore()
 
 const router = useRouter();
 
 const handleLogout = () => {
   authStore.logout();
-  router.push('/login');
-  localStorage.removeItem('token');
-  disconnectWebSocket();
 };
 
 const isFullScreen = ref(false);
@@ -142,7 +137,7 @@ const deleteItem = () => {
   }
 };
 
-const clickSettingDialog = async () => {
+const clickSettingDialog = () => {
   SettingDialog.value = true;
 }
 const clickDefaultFactoryName = (factoryName) => {
@@ -151,8 +146,8 @@ const clickDefaultFactoryName = (factoryName) => {
 
 
 onMounted(async () => {
-  await rmdColorSetStore.getRmdColorSetList();
-  items.value = rmdColorSetStore.rmdColorSetList;
+  RMDStore.getRMDColorSetList()
+  items.value = RMDStore.RMDColorSetList
 });
 
 </script>
@@ -517,8 +512,6 @@ onMounted(async () => {
   pointer-events: auto;
   /* 보일 때는 클릭 가능 */
 }
-
-
 
 .machine-run-btn {
   width: 100px;

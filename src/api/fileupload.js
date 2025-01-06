@@ -21,13 +21,3 @@ export const uploadFile = async (file) => {
     alert('Upload failed.')
   }
 }
-
-export const getrmdFactory = async () => {
-  try {
-    const response = await axios.get('/api/rmdfactorys')
-    return response.data
-  } catch (error) {
-    console.error(error)
-    alert('Get FileName failed.')
-  }
-}

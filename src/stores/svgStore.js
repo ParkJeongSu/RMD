@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getrmdFactory } from '@/api/fileupload'
-import { usermdColorSetStore } from './rmdColorSetStore'
-import { updateDefaultFactory } from '@/api/rmdFactory'
+import { useRMDstore } from './RMDStore'
 import { getAllState } from '@/api/State'
 
 // SVG 상태 관리 스토어
@@ -11,24 +9,18 @@ export const useSvgStore = defineStore(
   () => {
     const svgMap = ref({})
     const svgLoadCompleted = ref(false)
-    const currentMenuName = ref('')
-    const rmdFactoryNameList = ref([])
+
     let updateQueue = Promise.resolve()
 
     // SVG 미리 로드
-    async function loadSvgFiles() {
-      const rmdFactoryList = await getrmdFactory()
-      // const svgFiles = ['/layout/A1.svg','/layout/T1.svg','/layout/E1.svg'];
-
-      // const svgFiles = fileNameList.map((filename) => '/layout/' + filename.factoryName + '.svg')
+    async function loadsvgFiles() {
+      const RMDStore = useRMDstore()
+      RMDStore.getRMDFactoryList()
+      const rmdFactoryList = RMDStore.RMDFactoryList
       const svgFiles = []
       for (const file of rmdFactoryList) {
-        if (file.defaultFactoryFlag === 'Y') {
-          currentMenuName.value = file.factoryName
-        }
         svgFiles.push('/layout/' + file.factoryName + '.svg')
       }
-      rmdFactoryNameList.value = rmdFactoryList
 
       for (const path of svgFiles) {
         const response = await fetch(path) // fetch로 파일 가져오기
@@ -39,10 +31,11 @@ export const useSvgStore = defineStore(
       svgLoadCompleted.value = true
     }
 
-    async function initSvgColor() {
+    async function initsvgColor() {
       const allState = await getAllState()
-      const rmdColorSetStore = usermdColorSetStore()
-      await rmdColorSetStore.getRmdColorSetList()
+      const RMDStore = useRMDstore()
+      RMDStore.getRMDColorSetList()
+      const RMDColorSetList = RMDStore.RMDColorSetList
 
       for (let state of allState) {
         console.log(state)
@@ -51,16 +44,15 @@ export const useSvgStore = defineStore(
           const doc = parser.parseFromString(svgContent, 'image/svg+xml')
           const targetElement = doc.querySelector('#' + state.objectName)
           if (targetElement) {
-            const colorSetList = rmdColorSetStore.rmdColorSetList
-            for (let i = 0; i < colorSetList.length; i++) {
-              if (colorSetList[i].typeName === targetElement.getAttribute('type')) {
+            for (let i = 0; i < RMDColorSetList.length; i++) {
+              if (RMDColorSetList[i].typeName === targetElement.getAttribute('type')) {
                 if (
-                  state.stateName === colorSetList[i].stateName &&
-                  state.stateValue === colorSetList[i].stateValue
+                  state.stateName === RMDColorSetList[i].stateName &&
+                  state.stateValue === RMDColorSetList[i].stateValue
                 ) {
                   targetElement.setAttribute(
-                    colorSetList[i].typeAttribute,
-                    colorSetList[i].typeAttributeValue,
+                    RMDColorSetList[i].typeAttribute,
+                    RMDColorSetList[i].typeAttributeValue,
                   )
                 }
               }
@@ -82,16 +74,6 @@ export const useSvgStore = defineStore(
       }
     }
 
-    function modifyDefaultFactory(factoryName) {
-      const obj = rmdFactoryNameList.value.find(
-        (rmdFactory) => rmdFactory.factoryName === factoryName,
-      )
-      updateDefaultFactory(obj)
-      rmdFactoryNameList.value.forEach((rmd) => {
-        rmd.defaultFactoryFlag = rmd.factoryName === factoryName ? 'Y' : 'N'
-      })
-    }
-
     /**
      *
      * @param {
@@ -103,7 +85,8 @@ export const useSvgStore = defineStore(
     function updateSvgColor(obj) {
       updateQueue = updateQueue.then(async () => {
         if (svgLoadCompleted.value === true) {
-          const rmdColorSetStore = usermdColorSetStore()
+          const RMDStore = useRMDstore()
+          const rmdColorSetStore = RMDStore.RMDColorSetList
           const object = JSON.parse(obj)
           const newSVGList = {}
           for (const [svgFileName, svgContent] of Object.entries(svgMap.value)) {
@@ -143,20 +126,12 @@ export const useSvgStore = defineStore(
       })
     }
 
-    function setMenuName(menuName) {
-      currentMenuName.value = menuName
-    }
-
     return {
       svgMap,
       svgLoadCompleted,
-      currentMenuName,
-      rmdFactoryNameList,
-      loadSvgFiles,
+      loadsvgFiles,
       updateSvgColor,
-      setMenuName,
-      modifyDefaultFactory,
-      initSvgColor,
+      initsvgColor,
     }
   },
   {

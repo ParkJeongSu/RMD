@@ -1,14 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
-import { useSvgStore } from '@/stores/svgStore';
-import { useRouter } from 'vue-router';
-import { login } from '@/api/auth';
-import { connectWebSocket } from '@/websocket/websocket'
 
 const authStore = useAuthStore();
-const svgStore = useSvgStore();
-const router = useRouter();
 
 const username = ref('');
 const password = ref('');
@@ -16,11 +10,7 @@ const errorMessage = ref('');
 
 const handleLogin = async () => {
   try {
-    const response = await login(username.value, password.value); // api 호출
-    authStore.login(username.value); // 상태관리하기 위해 유저정보 저장
-    await svgStore.loadSvgFiles();
-    router.push('/');  // 로그인 성공 시 홈으로 리다이렉트
-    connectWebSocket();
+    authStore.login(username.value, password.value); // 상태관리하기 위해 유저정보 저장
   }
   catch (error) {
     errorMessage.value = error.message || 'Login failed. Please try again.';
