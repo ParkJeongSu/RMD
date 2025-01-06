@@ -16,8 +16,8 @@ const errorMessage = ref('');
 
 const handleLogin = async () => {
   try {
-    const response = await login(username.value, password.value);
-    authStore.login(username.value);
+    const response = await login(username.value, password.value); // api 호출
+    authStore.login(username.value); // 상태관리하기 위해 유저정보 저장
     await svgStore.loadSvgFiles();
     router.push('/');  // 로그인 성공 시 홈으로 리다이렉트
     connectWebSocket();
