@@ -2,15 +2,13 @@
 import { debounce } from 'lodash';
 import { ref, computed, watch, nextTick, onMounted } from 'vue';
 import { useSvgStore } from '@/stores/svgStore';
+import { useUIStore } from '@/stores/UIStore';
 import PopupDialog from '@/components/PopupDialog.vue';
 
-const defaultFactoryName = 'A1';
+
+const UIStore = useUIStore();
 const svgStore = useSvgStore();
-
-const selectedHeader = ref(svgStore.currentMenuName || defaultFactoryName);
-//const selectedHeader = computed(() => svgStore.currentMenuName);
-// const svgMap = computed(() => svgStore.svgMap);
-
+const selectedHeader = ref(UIStore.currentHeaderName);
 const svgMap = ref(svgStore.svgMap);
 
 const dialogVisible = ref(false);
@@ -30,8 +28,8 @@ watch(() => svgStore.svgMap, debounce(async (newVal) => {
   await nextTick();
 }, 200));  // 200ms 딜레이
 
-watch(() => svgStore.currentMenuName, (newVal) => {
-  selectedHeader.value = newVal || defaultFactoryName;
+watch(() =>  UIStore.currentHeaderName, (newVal) => {
+  selectedHeader.value = newVal
 });
 
 

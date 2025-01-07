@@ -1,21 +1,25 @@
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue';
-import { useSvgStore } from '@/stores/svgStore';
+import { useRMDstore } from '@/stores/RMDStore';
+import { useUIStore } from '@/stores/UIStore';
 
 
-const svgStore = useSvgStore();
-const currentTabName = ref(svgStore.currentMenuName);
-const rmdFactoryList = ref(svgStore.rmdFactoryNameList);
+const RMDStore = useRMDstore();
+const UIStore = useUIStore();
+const currentTabName = ref(UIStore.currentHeaderName);
+const RMDFactoryList = ref(RMDStore.RMDFactoryList);
 
 
 // 로그인 후 svgStore.currentMenuName이 변경되면 반영
-watch(() => svgStore.currentMenuName, (newVal) => {
-  currentTabName.value = newVal || rmdFactoryList.value[0].factoryName;
+watch(() => UIStore.currentHeaderName, (newVal) => {
+  currentTabName.value = newVal || RMDFactoryList.value[0].factoryName;
 });
 
-watch(() => svgStore.rmdFactoryNameList, (newVal) => {
-  rmdFactoryList.value = newVal || [];
-});
+watch(() => RMDStore.RMDFactoryList, (newVal) => {
+  RMDFactoryList.value = newVal || [];
+}
+, { deep: true }
+);
 
 
 onMounted(async () => {
@@ -26,7 +30,7 @@ onMounted(async () => {
 });
 
 const setCurrentMenuName = (value) => {
-  svgStore.setMenuName(value);
+  UIStore.setHeaderName(value);
 };
 
 function refreshContent() {
@@ -43,8 +47,8 @@ function refreshContent() {
         <!-- Tabs -->
         <v-tabs :key="currentTabName" v-model="currentTabName" align-tabs="center" color="primary"
           @update:modelValue="setCurrentMenuName">
-          <v-tab v-for="(rmdFactory, index) in rmdFactoryList" :key="index" :value="rmdFactory.factoryName">{{
-            rmdFactory.factoryName }}</v-tab>
+          <v-tab v-for="(rmdFactory, index) in RMDFactoryList" :key="index" :value="rmdFactory.factoryName">{{
+            rmdFactory.factoryName}}</v-tab>
         </v-tabs>
       </div>
 

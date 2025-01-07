@@ -38,7 +38,7 @@ export const useSvgStore = defineStore(
       const RMDColorSetList = RMDStore.RMDColorSetList
 
       for (let state of allState) {
-        console.log(state)
+        // console.log(state)
         for (const [svgFileName, svgContent] of Object.entries(svgMap.value)) {
           const parser = new DOMParser()
           const doc = parser.parseFromString(svgContent, 'image/svg+xml')
@@ -68,7 +68,7 @@ export const useSvgStore = defineStore(
             tooltip.textContent = state.tooltipText || 'Tooltip 정보 없음'
             targetElement.appendChild(tooltip)
           }
-          console.log(doc.documentElement.outerHTML)
+          // console.log(doc.documentElement.outerHTML)
           svgMap.value[svgFileName] = doc.documentElement.outerHTML
         }
       }
