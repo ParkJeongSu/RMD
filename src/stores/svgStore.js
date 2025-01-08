@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useRMDstore } from './RMDStore'
 import { getAllState } from '@/api/State'
+import { uploadFile } from '@/api/fileupload'
 
 // SVG 상태 관리 스토어
 export const useSvgStore = defineStore(
@@ -30,6 +31,11 @@ export const useSvgStore = defineStore(
       }
       svgLoadCompleted.value = true
     }
+
+    async function uploadsvgFiles(file){
+      uploadFile(file)
+    }
+
 
     async function initsvgColor() {
       const allState = await getAllState()
@@ -132,6 +138,7 @@ export const useSvgStore = defineStore(
       loadsvgFiles,
       updateSvgColor,
       initsvgColor,
+      uploadsvgFiles
     }
   },
   {

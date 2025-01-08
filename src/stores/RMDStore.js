@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { getRMDColorSet } from '@/api/RMDColorSet'
-import { updateDefaultFactory, getRMDFactory } from '@/api/RMDFactory'
+import { updateDefaultFactory, getRMDFactory ,removeRMDFactory} from '@/api/RMDFactory'
 import { useUIStore } from './UIStore'
 
 export const useRMDstore = defineStore(
@@ -33,12 +33,27 @@ export const useRMDstore = defineStore(
       })
     }
 
+    function removeDefaultFactory(){
+      const objList = RMDFactoryList.value.filter(factory => factory.defaultFactoryFlag === 'Y');
+      if(objList.length > 0)
+      {
+        const obj = objList.at(0)
+        removeRMDFactory(obj)
+        const index = RMDFactoryList.value.findIndex((rmdFactory) => rmdFactory.factoryName === obj.factoryName)
+        RMDFactoryList.value.splice(index,1)
+        if(RMDFactoryList.value.length > 0 ){
+          setDefaultFactory(RMDFactoryList.value[0].factoryName)
+        }
+      }
+    }
+
     return {
       RMDColorSetList,
       RMDFactoryList,
       getRMDColorSetList,
       getRMDFactoryList,
       setDefaultFactory,
+      removeDefaultFactory
     }
   },
   {

@@ -1,9 +1,9 @@
 <script setup>
 import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { useDisplay } from 'vuetify';
-import { uploadFile } from '@/api/fileupload';
+// import { uploadFile } from '@/api/fileupload';
 import { useAuthStore } from '@/stores/authStore';
-// import { useSvgStore } from '@/stores/svgStore';
+import { useSvgStore } from '@/stores/svgStore';
 import { useRMDstore } from '@/stores/RMDStore';
 import { useRouter } from 'vue-router';
 
@@ -18,7 +18,8 @@ const stockerLegendDialog = ref(false);  // 다이얼로그 상태
 const portLegendDialog = ref(false);  // 다이얼로그 상태
 
 const authStore = useAuthStore();
-const RMDStore = useRMDstore()
+const RMDStore = useRMDstore();
+const svgStore = useSvgStore();
 
 const router = useRouter();
 
@@ -44,7 +45,8 @@ const toggleFullScreen = () => {
 // file upload
 const file = ref(null);
 const handleFileUpload = () => {
-  uploadFile(file.value);
+  //uploadFile(file.value);
+  svgStore.uploadsvgFiles(file.value);
 }
 
 
@@ -157,6 +159,9 @@ const clickSettingDialog = () => {
 const clickDefaultFactoryName = (factoryName) => {
   RMDStore.setDefaultFactory(factoryName)
 }
+const clickFactoryDelete = () =>{
+  RMDStore.removeDefaultFactory();
+}
 
 onMounted(async () => {
   RMDStore.getRMDColorSetList()
@@ -190,17 +195,19 @@ onMounted(async () => {
         </template>
 
         <v-list>
-          <v-list-item>
+          <v-list-item v-if="authStore.isLoggedIn" >
             <v-btn block color="primary" @click="clickSettingDialog">
               Setting
             </v-btn>
           </v-list-item>
+          <!--
           <v-list-item>
             <v-btn block color="primary" @click="router.push('/login')">
               LogIn
             </v-btn>
           </v-list-item>
-          <v-list-item>
+          -->
+          <v-list-item v-if="authStore.isLoggedIn">
             <v-btn block color="primary" @click="handleLogout">
               LogOut
             </v-btn>
@@ -220,7 +227,7 @@ onMounted(async () => {
                   @click="clickDefaultFactoryName(item.factoryName)">{{ item.factoryName }}</v-btn>
               </v-col>
             </v-row>
-            <v-btn color="error" @click=" console.log('remove')">DELETE</v-btn>
+            <v-btn color="error" @click="clickFactoryDelete">Factory DELETE</v-btn>
           </v-container>
 
           <v-card-title class="headline">SVG file Upload ( [FactoryName].svg )</v-card-title>
