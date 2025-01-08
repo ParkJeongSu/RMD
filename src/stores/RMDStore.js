@@ -37,7 +37,7 @@ export const useRMDstore = defineStore(
       const objList = RMDFactoryList.value.filter(factory => factory.defaultFactoryFlag === 'Y');
       if(objList.length > 0)
       {
-        const obj = objList.at(0)
+        const obj = objList[0]
         removeRMDFactory(obj)
         const index = RMDFactoryList.value.findIndex((rmdFactory) => rmdFactory.factoryName === obj.factoryName)
         RMDFactoryList.value.splice(index,1)
