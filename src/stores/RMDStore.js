@@ -1,7 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getRMDColorSet } from '@/api/RMDColorSet'
-import { updateDefaultFactory, getRMDFactory ,removeRMDFactory} from '@/api/RMDFactory'
+import {
+  getRMDColorSet,
+  createRMDColorSet,
+  setRMDColorSet,
+  removeRMDColorSet,
+} from '@/api/RMDColorSet'
+import { updateDefaultFactory, getRMDFactory, removeRMDFactory } from '@/api/RMDFactory'
 import { useUIStore } from './UIStore'
 
 export const useRMDstore = defineStore(
@@ -12,8 +17,36 @@ export const useRMDstore = defineStore(
     const UIStore = useUIStore()
 
     async function getRMDColorSetList() {
-      const RMDColorSetList = await getRMDColorSet()
-      RMDColorSetList.value = RMDColorSetList.data;
+      const result = await getRMDColorSet()
+      RMDColorSetList.value = result.data
+    }
+
+    async function addRMDColorSet(obj) {
+      const result = await createRMDColorSet(obj)
+      RMDColorSetList.value = RMDColorSetList.value.concat(result.data)
+    }
+    async function modifyRMDColorSet(obj) {
+      const result = await setRMDColorSet(obj)
+      RMDColorSetList.value = RMDColorSetList.value.map((colorSet) =>
+        colorSet.typeName === result.data.typeName &&
+        colorSet.stateName === result.data.stateName &&
+        colorSet.stateValue === result.data.stateValue &&
+        colorSet.typeAttribute === result.data.typeAttribute
+          ? obj
+          : colorSet,
+      )
+    }
+
+    async function deleteRMDColorSet(obj) {
+      const result = await removeRMDColorSet(obj)
+      RMDColorSetList.value = RMDColorSetList.value.filter((colorSet) => {
+        return !(
+          colorSet.typeName === result.data.typeName &&
+          colorSet.stateName === result.data.stateName &&
+          colorSet.stateValue === result.data.stateValue &&
+          colorSet.typeAttribute === result.data.typeAttribute
+        )
+      })
     }
 
     async function getRMDFactoryList() {
@@ -34,15 +67,16 @@ export const useRMDstore = defineStore(
       })
     }
 
-    function removeDefaultFactory(){
-      const objList = RMDFactoryList.value.filter(factory => factory.defaultFactoryFlag === 'Y');
-      if(objList.length > 0)
-      {
+    function removeDefaultFactory() {
+      const objList = RMDFactoryList.value.filter((factory) => factory.defaultFactoryFlag === 'Y')
+      if (objList.length > 0) {
         const obj = objList[0]
         removeRMDFactory(obj)
-        const index = RMDFactoryList.value.findIndex((rmdFactory) => rmdFactory.factoryName === obj.factoryName)
-        RMDFactoryList.value.splice(index,1)
-        if(RMDFactoryList.value.length > 0 ){
+        const index = RMDFactoryList.value.findIndex(
+          (rmdFactory) => rmdFactory.factoryName === obj.factoryName,
+        )
+        RMDFactoryList.value.splice(index, 1)
+        if (RMDFactoryList.value.length > 0) {
           setDefaultFactory(RMDFactoryList.value[0].factoryName)
         }
       }
@@ -52,9 +86,13 @@ export const useRMDstore = defineStore(
       RMDColorSetList,
       RMDFactoryList,
       getRMDColorSetList,
+      addRMDColorSet,
+      modifyRMDColorSet,
+      deleteRMDColorSet,
+      removeRMDColorSet,
       getRMDFactoryList,
       setDefaultFactory,
-      removeDefaultFactory
+      removeDefaultFactory,
     }
   },
   {

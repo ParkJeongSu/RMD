@@ -51,7 +51,7 @@ const handleFileUpload = () => {
 
 
 const DefaultFactoryList = ref(RMDStore.RMDFactoryList);
-const currentDefaultFactoryName = ref( RMDStore.RMDFactoryList.filter( RMD=> RMD.defaultFactoryFlag ==='Y' ).at(0).factoryName );
+const currentDefaultFactoryName = ref(RMDStore.RMDFactoryList.filter(RMD => RMD.defaultFactoryFlag === 'Y').at(0).factoryName);
 // console.log( 'Defualt :' + RMDStore.RMDFactoryList.filter( RMD=> RMD.defaultFactoryFlag ==='Y' ).at(0).factoryName)
 watch(() => RMDStore.RMDFactoryList, (newVal) => {
   DefaultFactoryList.value = newVal || [];
@@ -62,6 +62,9 @@ watch(() => RMDStore.RMDFactoryList, (newVal) => {
   }
 }, { deep: true }); // { deep: true }는 부하를 준다고 함. 추후 수정예정
 
+watch(() => RMDStore.RMDColorSetList, (newVal) => {
+  items.value = newVal || [];
+}, { deep: true }); // { deep: true }는 부하를 준다고 함. 추후 수정예정
 
 
 // 테이블 데이터
@@ -104,7 +107,7 @@ const onRowSelected = (selectedRows) => {
 // 생성 다이얼로그 열기
 const openCreateDialog = () => {
   isEdit.value = false;
-  Object.assign(editedItem, { typeName: '', stateName: '', stateValue: '',typeAttribute: '', typeAttributeValue: '' });
+  Object.assign(editedItem, { typeName: '', stateName: '', stateValue: '', typeAttribute: '', typeAttributeValue: '' });
   dialog.value = true;
 };
 
@@ -114,10 +117,10 @@ const openEditDialog = () => {
   if (selectedItem.value.length > 0) {
     const selectedItemSplit = selectedItem.value.split("-");
     const fintItemByselectedItem = items.value.find(item => item.typeName === selectedItemSplit[0]
-                                        && item.stateName === selectedItemSplit[1]
-                                        && item.stateValue === selectedItemSplit[2]
-                                        && item.typeAttribute === selectedItemSplit[3]
-                                      );
+      && item.stateName === selectedItemSplit[1]
+      && item.stateValue === selectedItemSplit[2]
+      && item.typeAttribute === selectedItemSplit[3]
+    );
 
     Object.assign(editedItem, fintItemByselectedItem);
     dialog.value = true;
@@ -127,14 +130,16 @@ const openEditDialog = () => {
 // 항목 저장
 const saveItem = () => {
   if (isEdit.value) {
-    const index = items.value.findIndex(item => item.typeName === editedItem.typeName
-                                        && item.stateName === editedItem.stateName
-                                        && item.stateValue === editedItem.stateValue
-                                        && item.typeAttribute === editedItem.typeAttribute
-                                      );
-    items.value[index] = { ...editedItem };
+    RMDStore.modifyRMDColorSet(editedItem)
+    // const index = items.value.findIndex(item => item.typeName === editedItem.typeName
+    //   && item.stateName === editedItem.stateName
+    //   && item.stateValue === editedItem.stateValue
+    //   && item.typeAttribute === editedItem.typeAttribute
+    // );
+    // items.value[index] = { ...editedItem };
   } else {
-    items.value.push({ ...editedItem });
+    RMDStore.addRMDColorSet(editedItem)
+    // items.value.push({ ...editedItem });
   }
   dialog.value = false;
 };
@@ -143,13 +148,21 @@ const saveItem = () => {
 const deleteItem = () => {
   if (selectedItem.value.length > 0) {
     const selectedItemSplit = selectedItem.value.split("-");
-    const index = items.value.findIndex(item => item.typeName === selectedItemSplit[0]
-                                        && item.stateName === selectedItemSplit[1]
-                                        && item.stateValue === selectedItemSplit[2]
-                                        && item.typeAttribute === selectedItemSplit[3]
-                                      );
-    items.value.splice(index, 1);
-    selectedItem.value = null;
+    // const index = items.value.findIndex(item => item.typeName === selectedItemSplit[0]
+    //   && item.stateName === selectedItemSplit[1]
+    //   && item.stateValue === selectedItemSplit[2]
+    //   && item.typeAttribute === selectedItemSplit[3]
+    // );
+    // items.value.splice(index, 1);
+    // selectedItem.value = null;
+    let obj = {
+      typeName: selectedItemSplit[0],
+      stateName: selectedItemSplit[1],
+      stateValue: selectedItemSplit[2],
+      typeAttribute: selectedItemSplit[3],
+      typeAttributeValue: ''
+    }
+    RMDStore.deleteRMDColorSet(obj)
   }
 };
 
@@ -159,7 +172,7 @@ const clickSettingDialog = () => {
 const clickDefaultFactoryName = (factoryName) => {
   RMDStore.setDefaultFactory(factoryName)
 }
-const clickFactoryDelete = () =>{
+const clickFactoryDelete = () => {
   RMDStore.removeDefaultFactory();
 }
 
@@ -195,7 +208,7 @@ onMounted(async () => {
         </template>
 
         <v-list>
-          <v-list-item v-if="authStore.isLoggedIn" >
+          <v-list-item v-if="authStore.isLoggedIn">
             <v-btn block color="primary" @click="clickSettingDialog">
               Setting
             </v-btn>
@@ -250,13 +263,9 @@ onMounted(async () => {
               <!--item-value="(item) => `${item.typeName}-${item.StateName}`" -->
               <!--item-value="typeName" -->
               <!-- @update:model-value="onRowSelected" -->
-              <v-data-table
-                :model-value="[selectedItem]"
-                :headers="headers"
-                :items="items"
+              <v-data-table :model-value="[selectedItem]" :headers="headers" :items="items"
                 :item-value="(item) => `${item.typeName}-${item.stateName}-${item.stateValue}-${item.typeAttribute}`"
-                show-select
-                @update:model-value="onRowSelected">
+                show-select @update:model-value="onRowSelected">
               </v-data-table>
             </v-card>
 
@@ -268,11 +277,16 @@ onMounted(async () => {
                 </v-card-title>
                 <v-card-text>
                   <v-form ref="form">
-                    <v-text-field v-model="editedItem.typeName" label="Type Name" :disabled="isEdit" required></v-text-field>
-                    <v-text-field v-model="editedItem.stateName" label="State Name" :disabled="isEdit" required></v-text-field>
-                    <v-text-field v-model="editedItem.stateValue" label="State Value" :disabled="isEdit" required></v-text-field>
-                    <v-text-field v-model="editedItem.typeAttribute" label="Type Attribute" :disabled="isEdit" required></v-text-field>
-                    <v-text-field v-model="editedItem.typeAttributeValue" label="Type Attribute Value" required></v-text-field>
+                    <v-text-field v-model="editedItem.typeName" label="Type Name" :disabled="isEdit"
+                      required></v-text-field>
+                    <v-text-field v-model="editedItem.stateName" label="State Name" :disabled="isEdit"
+                      required></v-text-field>
+                    <v-text-field v-model="editedItem.stateValue" label="State Value" :disabled="isEdit"
+                      required></v-text-field>
+                    <v-text-field v-model="editedItem.typeAttribute" label="Type Attribute" :disabled="isEdit"
+                      required></v-text-field>
+                    <v-text-field v-model="editedItem.typeAttributeValue" label="Type Attribute Value"
+                      required></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-card-actions>
