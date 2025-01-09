@@ -12,7 +12,8 @@ export const useRMDstore = defineStore(
     const UIStore = useUIStore()
 
     async function getRMDColorSetList() {
-      RMDColorSetList.value = await getRMDColorSet()
+      const RMDColorSetList = await getRMDColorSet()
+      RMDColorSetList.value = RMDColorSetList.data;
     }
 
     async function getRMDFactoryList() {
