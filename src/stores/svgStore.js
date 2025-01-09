@@ -33,7 +33,15 @@ export const useSvgStore = defineStore(
     }
 
     async function uploadsvgFiles(file){
-      uploadFile(file)
+      const upLoadResult = await uploadFile(file)
+      if(upLoadResult.success === true){
+        const RMDStore = useRMDstore()
+        RMDStore.getRMDFactoryList()
+        const path = '/layout/' + upLoadResult.data.factoryName + '.svg'
+        const response = await fetch(path) // fetch로 파일 가져오기
+        const svgContent = await response.text() // SVG 파일을 텍스트로 변환
+        svgMap.value[upLoadResult.data.factoryName] = svgContent
+      }
     }
 
 

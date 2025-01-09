@@ -8,9 +8,9 @@ export const uploadFile = async (file) => {
 
   const formData = new FormData()
   formData.append('file', file)
-
+  let  response;
   try {
-    const response = await axios.post('/api/file/upload', formData, {
+    response = await axios.post('/api/file/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -20,4 +20,5 @@ export const uploadFile = async (file) => {
     console.error(error)
     alert('Upload failed.')
   }
+  return response.data;
 }
