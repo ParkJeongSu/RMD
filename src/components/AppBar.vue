@@ -5,6 +5,7 @@ import { useDisplay } from 'vuetify';
 import { useAuthStore } from '@/stores/authStore';
 import { useSvgStore } from '@/stores/svgStore';
 import { useRMDstore } from '@/stores/RMDStore';
+import { useUIStore } from '@/stores/UIStore';
 import { useRouter } from 'vue-router';
 
 // 반응형 디스플레이
@@ -20,6 +21,7 @@ const portLegendDialog = ref(false);  // 다이얼로그 상태
 const authStore = useAuthStore();
 const RMDStore = useRMDstore();
 const svgStore = useSvgStore();
+const uiStore = useUIStore();
 
 const router = useRouter();
 
@@ -51,7 +53,14 @@ const handleFileUpload = () => {
 
 
 const DefaultFactoryList = ref(RMDStore.RMDFactoryList);
-const currentDefaultFactoryName = ref(RMDStore.RMDFactoryList.filter(RMD => RMD.defaultFactoryFlag === 'Y').at(0).factoryName);
+
+let initFactoryobj = RMDStore.RMDFactoryList.filter(RMD => RMD.defaultFactoryFlag === 'Y');
+let initFactoryName = '';
+if(initFactoryobj.length > 0)
+{
+  initFactoryName = initFactoryobj[0].factoryName
+}
+const currentDefaultFactoryName = ref(initFactoryName);
 // console.log( 'Defualt :' + RMDStore.RMDFactoryList.filter( RMD=> RMD.defaultFactoryFlag ==='Y' ).at(0).factoryName)
 watch(() => RMDStore.RMDFactoryList, (newVal) => {
   DefaultFactoryList.value = newVal || [];
@@ -176,6 +185,11 @@ const clickFactoryDelete = () => {
   RMDStore.removeDefaultFactory();
 }
 
+const clickSearchTextField = (event) => {
+  console.log(event.target.value);
+  uiStore.setsearchObjName(event.target.value)
+}
+
 onMounted(async () => {
   RMDStore.getRMDColorSetList()
   items.value = RMDStore.RMDColorSetList
@@ -195,8 +209,17 @@ onMounted(async () => {
 
       <!-- 반응형 버튼: md 이상에서만 보임 -->
       <template v-if="mdAndUp">
-        <v-btn icon="mdi-magnify" variant="text"></v-btn>
-        <v-btn icon="mdi-filter" variant="text"></v-btn>
+        <v-text-field
+          label="Search EQP or Port or Stocker"
+          outlined
+          dense
+          hide-details
+          color="primary"
+          class="rounded-text-field"
+          @keyup.enter="clickSearchTextField"
+        />
+        <v-btn icon="mdi-magnify" variant="text" @click="clickSearchTextField"></v-btn>
+        <!--<v-btn icon="mdi-filter" variant="text"></v-btn>-->
         <v-btn @click="toggleFullScreen" :icon="isFullScreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'"
           color="blue"></v-btn>
       </template>
@@ -486,6 +509,18 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+
+.my-input-container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-text-field {
+  border-radius: 24px;
+}
+
 .row-spacing {
   margin-bottom: 16px;
   /* 원하는 여백 크기로 조정 */

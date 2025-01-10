@@ -15,7 +15,7 @@ export const uploadFile = async (file) => {
         'Content-Type': 'multipart/form-data',
       },
     })
-    alert(response.data)
+    alert('Upload : ' + response.data.success)
   } catch (error) {
     console.error(error)
     alert('Upload failed.')

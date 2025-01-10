@@ -5,12 +5,17 @@ export const useUIStore = defineStore(
   'UI',
   () => {
     const currentHeaderName = ref('')
+    const searchObjName = ref('')
 
     function setHeaderName(headerName) {
       currentHeaderName.value = headerName
     }
 
-    return { currentHeaderName, setHeaderName }
+    function setsearchObjName(targetName) {
+      searchObjName.value = targetName
+    }
+
+    return { currentHeaderName,searchObjName, setHeaderName,setsearchObjName }
   },
   {
     persist: true,

@@ -21,6 +21,8 @@ let isDragging = false;
 let startX = 0;
 let startY = 0;
 
+const searchObjName = ref(UIStore.searchObjName);
+
 
 watch(() => svgStore.svgMap, debounce(async (newVal) => {
   await nextTick();
@@ -31,6 +33,39 @@ watch(() => svgStore.svgMap, debounce(async (newVal) => {
 watch(() =>  UIStore.currentHeaderName, (newVal) => {
   selectedHeader.value = newVal
 });
+
+
+watch(() =>  UIStore.searchObjName, (newVal) => {
+  searchObjName.value = newVal
+  zoomToObjName();
+});
+
+const zoomToObjName = () => {
+  const container = document.querySelector('.svg-container');
+  if (!container || !searchObjName.value) return;
+
+  const targetElement = container.querySelector(`#${searchObjName.value}`);
+
+  if (targetElement) {
+    const boundingBox = targetElement.getBoundingClientRect();
+    const containerBox = container.getBoundingClientRect();
+
+    const targetCenterX = boundingBox.left + boundingBox.width / 2;
+    const targetCenterY = boundingBox.top + boundingBox.height / 2;
+
+    const containerCenterX = containerBox.left + containerBox.width / 2;
+    const containerCenterY = containerBox.top + containerBox.height / 2;
+
+    translateX.value += (containerCenterX - targetCenterX) / scale.value;
+    translateY.value += (containerCenterY - targetCenterY) / scale.value;
+
+    scale.value = 1.5; // 확대 비율 설정
+
+    console.log(`Zoomed to element with ID: ${searchObjName.value}`);
+  } else {
+    console.warn(`Element with ID: ${searchObjName.value} not found.`);
+  }
+};
 
 
 const handleDoubleClick = (event) => {
