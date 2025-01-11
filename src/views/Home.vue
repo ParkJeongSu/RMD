@@ -30,12 +30,12 @@ watch(() => svgStore.svgMap, debounce(async (newVal) => {
   await nextTick();
 }, 200));  // 200ms 딜레이
 
-watch(() =>  UIStore.currentHeaderName, (newVal) => {
+watch(() => UIStore.currentHeaderName, (newVal) => {
   selectedHeader.value = newVal
 });
 
 
-watch(() =>  UIStore.searchObjName, (newVal) => {
+watch(() => UIStore.searchObjName, (newVal) => {
   searchObjName.value = newVal
   zoomToObjName();
 });
@@ -110,7 +110,6 @@ const resetZoom = () => {
 };
 
 onMounted(() => {
-  console.log(`Home 컴포넌트가 마운트 됐습니다.`)
   svgStore.initsvgColor();
 })
 
@@ -142,9 +141,18 @@ onMounted(() => {
   <v-container v-else class="d-flex justify-center align-center" style="height: 100vh;">
     <v-progress-circular indeterminate color="primary"></v-progress-circular>
   </v-container>
+  <v-btn icon="mdi-refresh" @click="refreshContent" class="refresh-btn"></v-btn>
 </template>
 
 <style scoped>
+/* Refresh 버튼 우측 고정 */
+.refresh-btn {
+  position: fixed;
+  top: 65px;
+  right: 20px;
+  z-index: 1500;
+}
+
 .text-center div {
   cursor: grab;
 }

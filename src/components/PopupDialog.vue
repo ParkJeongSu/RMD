@@ -80,7 +80,6 @@ const desserts = ref(
   ]
 )
 onMounted(() => {
-  console.log(`컴포넌트가 마운트 됐습니다.`)
   desserts.value.push({
     name: 'test',
     calories: 262,
@@ -264,66 +263,3 @@ const rightSize = ref(66.66);
   overflow: hidden;
 }
 </style>
-
-
-<!--
-
-<v-dialog v-else-if="visible === true && type === 'Port'" :model-value="visible" max-width="600px"
-    @update:model-value="$emit('close')">
-    <v-card>
-      <v-card-title>
-        Port
-      </v-card-title>
-      <v-table>
-        <thead>
-          <tr>
-            <th class="text-left">
-              Name
-            </th>
-            <th class="text-left">
-              Calories
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in desserts" :key="item.name">
-            <td>{{ item.name }}</td>
-            <td>{{ item.calories }}</td>
-          </tr>
-        </tbody>
-      </v-table>
-      <v-card-actions>
-        <v-btn color="primary" @click="$emit('close')">Close</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-  <v-dialog v-else-if="visible === true && type === 'Stocker'" :model-value="visible" max-width="600px"
-    @update:model-value="$emit('close')">
-    <v-card>
-      <v-card-title>
-        Stocker
-      </v-card-title>
-      <v-table>
-        <thead>
-          <tr>
-            <th class="text-left">
-              Name
-            </th>
-            <th class="text-left">
-              Calories
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in desserts" :key="item.name">
-            <td>{{ item.name }}</td>
-            <td>{{ item.calories }}</td>
-          </tr>
-        </tbody>
-      </v-table>
-      <v-card-actions>
-        <v-btn color="primary" @click="$emit('close')">Close</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
--->

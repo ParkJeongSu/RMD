@@ -32,9 +32,9 @@ export const useSvgStore = defineStore(
       svgLoadCompleted.value = true
     }
 
-    async function uploadsvgFiles(file){
+    async function uploadsvgFiles(file) {
       const upLoadResult = await uploadFile(file)
-      if(upLoadResult.success === true){
+      if (upLoadResult.success === true) {
         const RMDStore = useRMDstore()
         RMDStore.getRMDFactoryList()
         const path = '/layout/' + upLoadResult.data.factoryName + '.svg'
@@ -43,7 +43,6 @@ export const useSvgStore = defineStore(
         svgMap.value[upLoadResult.data.factoryName] = svgContent
       }
     }
-
 
     async function initsvgColor() {
       const allState = await getAllState()
@@ -70,6 +69,10 @@ export const useSvgStore = defineStore(
                   )
                 }
               }
+            }
+
+            if (targetElement.hasAttribute('style')) {
+              targetElement.removeAttribute('style')
             }
 
             // 기존 tooltip 제거
@@ -123,6 +126,10 @@ export const useSvgStore = defineStore(
                 }
               }
 
+              if (targetElement.hasAttribute('style')) {
+                targetElement.removeAttribute('style')
+              }
+
               // 기존 tooltip 제거
               const existingTooltip = targetElement.querySelector('title')
               if (existingTooltip) {
@@ -146,7 +153,7 @@ export const useSvgStore = defineStore(
       loadsvgFiles,
       updateSvgColor,
       initsvgColor,
-      uploadsvgFiles
+      uploadsvgFiles,
     }
   },
   {

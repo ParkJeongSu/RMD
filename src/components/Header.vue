@@ -18,7 +18,7 @@ watch(() => UIStore.currentHeaderName, (newVal) => {
 watch(() => RMDStore.RMDFactoryList, (newVal) => {
   RMDFactoryList.value = newVal || [];
 }
-, { deep: true }
+  , { deep: true }
 );
 
 
@@ -33,10 +33,6 @@ const setCurrentMenuName = (value) => {
   UIStore.setHeaderName(value);
 };
 
-function refreshContent() {
-  console.log('Refresh clicked!');
-}
-
 </script>
 
 <template>
@@ -48,14 +44,9 @@ function refreshContent() {
         <v-tabs :key="currentTabName" v-model="currentTabName" align-tabs="center" color="primary"
           @update:modelValue="setCurrentMenuName">
           <v-tab v-for="(rmdFactory, index) in RMDFactoryList" :key="index" :value="rmdFactory.factoryName">{{
-            rmdFactory.factoryName}}</v-tab>
+            rmdFactory.factoryName }}</v-tab>
         </v-tabs>
       </div>
-
-      <!-- Refresh 버튼 (아이콘) -->
-      <v-btn icon="mdi-refresh" @click="refreshContent" class="refresh-btn">
-      </v-btn>
-
     </v-row>
 
   </v-container>
@@ -82,13 +73,5 @@ function refreshContent() {
   font-weight: bold;
   color: #1976d2;
   border-bottom: 2px solid #1976d2;
-}
-
-/* Refresh 버튼 우측 고정 */
-.refresh-btn {
-  position: fixed;
-  top: 65px;
-  right: 20px;
-  z-index: 1500;
 }
 </style>

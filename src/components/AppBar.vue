@@ -13,6 +13,7 @@ const { mobile, mdAndUp } = useDisplay();
 
 const drawer = ref(false);
 const hambugerClick = ref(false);
+const searchObj = ref('');
 const SettingDialog = ref(false);  // 다이얼로그 상태
 const machineLegendDialog = ref(false);  // 다이얼로그 상태
 const stockerLegendDialog = ref(false);  // 다이얼로그 상태
@@ -56,8 +57,7 @@ const DefaultFactoryList = ref(RMDStore.RMDFactoryList);
 
 let initFactoryobj = RMDStore.RMDFactoryList.filter(RMD => RMD.defaultFactoryFlag === 'Y');
 let initFactoryName = '';
-if(initFactoryobj.length > 0)
-{
+if (initFactoryobj.length > 0) {
   initFactoryName = initFactoryobj[0].factoryName
 }
 const currentDefaultFactoryName = ref(initFactoryName);
@@ -188,6 +188,7 @@ const clickFactoryDelete = () => {
 const clickSearchTextField = (event) => {
   console.log(event.target.value);
   uiStore.setsearchObjName(event.target.value)
+  searchObj.value = '';
 }
 
 onMounted(async () => {
@@ -199,7 +200,8 @@ onMounted(async () => {
 
 <template>
   <!--class="app-bar-wrapper"-->
-  <div :class="{ 'app-bar-wrapper': !drawer && !hambugerClick, 'app-bar-wrapper-click': drawer || hambugerClick }">
+  <div
+    :class="{ 'app-bar-wrapper': !drawer && !hambugerClick, 'app-bar-wrapper-click': drawer || hambugerClick || searchObj }">
     <v-app-bar color="primary" prominent class="app-bar">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"><v-icon>mdi-menu-open</v-icon></v-app-bar-nav-icon>
 
@@ -209,15 +211,8 @@ onMounted(async () => {
 
       <!-- 반응형 버튼: md 이상에서만 보임 -->
       <template v-if="mdAndUp">
-        <v-text-field
-          label="Search EQP or Port or Stocker"
-          outlined
-          dense
-          hide-details
-          color="primary"
-          class="rounded-text-field"
-          @keyup.enter="clickSearchTextField"
-        />
+        <v-text-field v-model="searchObj" label="Search EQP or Port or Stocker" outlined dense hide-details
+          color="primary" class="rounded-text-field" @keyup.enter="clickSearchTextField" />
         <v-btn icon="mdi-magnify" variant="text" @click="clickSearchTextField"></v-btn>
         <!--<v-btn icon="mdi-filter" variant="text"></v-btn>-->
         <v-btn @click="toggleFullScreen" :icon="isFullScreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'"
@@ -509,7 +504,6 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-
 .my-input-container {
   background-color: #f9f9f9;
   border-radius: 8px;
