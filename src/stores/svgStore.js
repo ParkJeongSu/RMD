@@ -45,50 +45,55 @@ export const useSvgStore = defineStore(
     }
 
     async function initsvgColor() {
-      const allState = await getAllState()
-      const RMDStore = useRMDstore()
-      RMDStore.getRMDColorSetList()
-      const RMDColorSetList = RMDStore.RMDColorSetList
+      console.log('initsvgColor 호출')
+      updateQueue = updateQueue.then(async () => {
+        console.log('initsvgColor 시작')
+        const allState = await getAllState()
+        const RMDStore = useRMDstore()
+        RMDStore.getRMDColorSetList()
+        const RMDColorSetList = RMDStore.RMDColorSetList
 
-      for (let state of allState) {
-        // console.log(state)
-        for (const [svgFileName, svgContent] of Object.entries(svgMap.value)) {
-          const parser = new DOMParser()
-          const doc = parser.parseFromString(svgContent, 'image/svg+xml')
-          const targetElement = doc.querySelector('#' + state.objectName)
-          if (targetElement) {
-            for (let i = 0; i < RMDColorSetList.length; i++) {
-              if (RMDColorSetList[i].typeName === targetElement.getAttribute('type')) {
-                if (
-                  state.stateName === RMDColorSetList[i].stateName &&
-                  state.stateValue === RMDColorSetList[i].stateValue
-                ) {
-                  targetElement.setAttribute(
-                    RMDColorSetList[i].typeAttribute,
-                    RMDColorSetList[i].typeAttributeValue,
-                  )
+        for (let state of allState) {
+          // console.log(state)
+          for (const [svgFileName, svgContent] of Object.entries(svgMap.value)) {
+            const parser = new DOMParser()
+            const doc = parser.parseFromString(svgContent, 'image/svg+xml')
+            const targetElement = doc.querySelector('#' + state.objectName)
+            if (targetElement) {
+              for (let i = 0; i < RMDColorSetList.length; i++) {
+                if (RMDColorSetList[i].typeName === targetElement.getAttribute('type')) {
+                  if (
+                    state.stateName === RMDColorSetList[i].stateName &&
+                    state.stateValue === RMDColorSetList[i].stateValue
+                  ) {
+                    targetElement.setAttribute(
+                      RMDColorSetList[i].typeAttribute,
+                      RMDColorSetList[i].typeAttributeValue,
+                    )
+                  }
                 }
               }
-            }
 
-            if (targetElement.hasAttribute('style')) {
-              targetElement.removeAttribute('style')
-            }
+              if (targetElement.hasAttribute('style')) {
+                targetElement.removeAttribute('style')
+              }
 
-            // 기존 tooltip 제거
-            const existingTooltip = targetElement.querySelector('title')
-            if (existingTooltip) {
-              existingTooltip.remove()
+              // 기존 tooltip 제거
+              const existingTooltip = targetElement.querySelector('title')
+              if (existingTooltip) {
+                existingTooltip.remove()
+              }
+              // Tooltip 추가
+              const tooltip = document.createElementNS('http://www.w3.org/2000/svg', 'title')
+              tooltip.textContent = state.tooltipText || 'Tooltip 정보 없음'
+              targetElement.appendChild(tooltip)
             }
-            // Tooltip 추가
-            const tooltip = document.createElementNS('http://www.w3.org/2000/svg', 'title')
-            tooltip.textContent = state.tooltipText || 'Tooltip 정보 없음'
-            targetElement.appendChild(tooltip)
+            // console.log(doc.documentElement.outerHTML)
+            svgMap.value[svgFileName] = doc.documentElement.outerHTML
           }
-          // console.log(doc.documentElement.outerHTML)
-          svgMap.value[svgFileName] = doc.documentElement.outerHTML
         }
-      }
+        console.log('initsvgColor 종료')
+      })
     }
 
     /**
@@ -103,7 +108,7 @@ export const useSvgStore = defineStore(
       updateQueue = updateQueue.then(async () => {
         if (svgLoadCompleted.value === true) {
           const RMDStore = useRMDstore()
-          const rmdColorSetStore = RMDStore.RMDColorSetList
+          const rmdColorSetList = RMDStore.RMDColorSetList
           const object = JSON.parse(obj)
           const newSVGList = {}
           for (const [svgFileName, svgContent] of Object.entries(svgMap.value)) {
@@ -111,16 +116,15 @@ export const useSvgStore = defineStore(
             const doc = parser.parseFromString(svgContent, 'image/svg+xml')
             const targetElement = doc.querySelector('#' + object.objectName)
             if (targetElement) {
-              const colorSetList = rmdColorSetStore.rmdColorSetList
-              for (let i = 0; i < colorSetList.length; i++) {
-                if (colorSetList[i].typeName === targetElement.getAttribute('type')) {
+              for (let i = 0; i < rmdColorSetList.length; i++) {
+                if (rmdColorSetList[i].typeName === targetElement.getAttribute('type')) {
                   if (
-                    object.stateName === colorSetList[i].stateName &&
-                    object.stateValue === colorSetList[i].stateValue
+                    object.stateName === rmdColorSetList[i].stateName &&
+                    object.stateValue === rmdColorSetList[i].stateValue
                   ) {
                     targetElement.setAttribute(
-                      colorSetList[i].typeAttribute,
-                      colorSetList[i].typeAttributeValue,
+                      rmdColorSetList[i].typeAttribute,
+                      rmdColorSetList[i].typeAttributeValue,
                     )
                   }
                 }

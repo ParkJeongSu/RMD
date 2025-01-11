@@ -10,6 +10,7 @@ import * as directives from 'vuetify/directives'
 import '@mdi/font/css/materialdesignicons.css'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import { connectWebSocket, disconnectWebSocket } from '@/websocket/websocket'
 
 const vuetify = createVuetify({
   components,
@@ -23,4 +24,7 @@ const app = createApp(App)
 app.use(router)
 app.use(vuetify)
 app.use(pinia)
+
+disconnectWebSocket()
+connectWebSocket()
 app.mount('#app')

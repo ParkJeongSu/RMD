@@ -1,6 +1,6 @@
 <script setup>
 import { debounce } from 'lodash';
-import { ref, computed, watch, nextTick, onMounted } from 'vue';
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { useSvgStore } from '@/stores/svgStore';
 import { useUIStore } from '@/stores/UIStore';
 import PopupDialog from '@/components/PopupDialog.vue';
@@ -22,6 +22,8 @@ let startX = 0;
 let startY = 0;
 
 const searchObjName = ref(UIStore.searchObjName);
+
+const disableRefreshBtn = ref(false);
 
 
 watch(() => svgStore.svgMap, debounce(async (newVal) => {
@@ -108,10 +110,25 @@ const resetZoom = () => {
   translateX.value = 0;
   translateY.value = 0;
 };
+const intervalId = ref(null);
+
+const refreshContent = async () => {
+  disableRefreshBtn.value = true
+  svgStore.initsvgColor();
+  setTimeout(() => disableRefreshBtn.value = false, 5000);
+};
+
 
 onMounted(() => {
   svgStore.initsvgColor();
+  intervalId.value = setInterval(refreshContent, 10000)
 })
+
+onBeforeUnmount(() => {
+  if (intervalId.value) {
+    clearInterval(intervalId.value);
+  }
+});
 
 </script>
 
@@ -141,7 +158,7 @@ onMounted(() => {
   <v-container v-else class="d-flex justify-center align-center" style="height: 100vh;">
     <v-progress-circular indeterminate color="primary"></v-progress-circular>
   </v-container>
-  <v-btn icon="mdi-refresh" @click="refreshContent" class="refresh-btn"></v-btn>
+  <v-btn icon="mdi-refresh" :disabled="disableRefreshBtn" @click="refreshContent" class="refresh-btn"></v-btn>
 </template>
 
 <style scoped>

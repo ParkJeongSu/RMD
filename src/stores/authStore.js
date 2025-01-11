@@ -19,7 +19,7 @@ export const useAuthStore = defineStore(
       const svgStore = useSvgStore()
       await svgStore.loadsvgFiles()
       router.push('/') // 로그인 성공 시 홈으로 리다이렉트
-      connectWebSocket()
+      //connectWebSocket()
       isLoggedIn.value = true
       userInfo.value = userId
     }
@@ -29,7 +29,7 @@ export const useAuthStore = defineStore(
       userInfo.value = null
       router.push('/login')
       localStorage.removeItem('token')
-      disconnectWebSocket()
+      //disconnectWebSocket()
     }
 
     return { isLoggedIn, userInfo, login, logout }
